@@ -32,6 +32,6 @@
     "vuepress-vite": "2.0.0-rc.0"
   },
   "dependencies": {
-    "markdown-it": "^13.0.2"
+    "markdown-it": "^14.0.0"
   }
 }
