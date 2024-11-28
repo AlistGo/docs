@@ -27,7 +27,7 @@
     "naive-ui": "^2.35.0",
     "sass": "^1.69.6",
     "vue": "^3.3.8",
-    "vuepress": "2.0.0-rc.0",
+    "vuepress": "2.0.0-rc.18",
     "vuepress-theme-hope": "2.0.0-rc.0",
     "vuepress-vite": "2.0.0-rc.0"
   },
