@@ -68,7 +68,7 @@ We fill in **https://alist.nn.ci/tool/google/album** to get a single catalog ID 
 
 
 
-## **Two notes:**
+## **Three notes:**
 
 1. failed get objs: failed to list objs: Request had insufficient authentication scopes.: []
     - It's because you didn't check the album permission (see the picture mentioned above) `view and organize the content in your Google Photos media library, and upload content to the media library when obtaining authorization. Learn more`
@@ -76,6 +76,7 @@ We fill in **https://alist.nn.ci/tool/google/album** to get a single catalog ID 
     
 2. failed get objs: failed to list objs: Photos Library API has not been used in project ... before or it is disabled. Enable it by visiting <https://console.developers.google.com/apis/api/photoslibrary.googleapis.com/overview> then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.: []
     - because **`Photos Library API`** is not enabled in your project, Google Photos API
+3. If using clash on Windows, only display all media, all albums, and shared albums, but prompt when entering a folder，failed get objs: failed to list objs，please use tun mode，https://github.com/alist-org/alist/issues/5056
 
 ### **Finish**
 
