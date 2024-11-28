@@ -19,7 +19,7 @@
     "@vuepress/utils": "2.0.0-rc.0",
     "artplayer": "^5.1.1",
     "dashjs": "^4.7.2",
-    "flowchart.ts": "^1.0.1",
+    "flowchart.ts": "^3.0.0",
     "hls.js": "^1.4.12",
     "mathjax-full": "^3.2.2",
     "mermaid": "^10.6.1",
