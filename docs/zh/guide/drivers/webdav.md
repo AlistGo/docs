@@ -39,7 +39,7 @@ WebDAV 根地址
 
 选择 vendor 为 sharepoint，支持国际版/世纪互联。
 
-你可以通过[这个工具](https://alist.nn.ci/tool/onedrive/webdav.html)获取 WebdAV 根地址，如果要挂载指定的目录，在后面拼接即可。
+你可以通过[这个工具](https://alist.nn.ci/tool/onedrive/webdav.html)获取 WebDAV 根地址，如果要挂载指定的目录，在后面拼接即可。
 
 用户名为 OneDrive 账号邮箱，密码即为 OneDrive 账号密码。
 
