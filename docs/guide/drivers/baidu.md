@@ -27,12 +27,12 @@ curl -L -X GET 'YOUR_LINK' -H 'User-Agent: pan.baidu.com'
 Or use the proxy function in this program to transfer.
 :::
 
-### **Refresh token**
+## **Refresh token**
 [Click here](https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=iYCeC9g08h5vuP9UqvPHKKSVrKFXGa1v&redirect_uri=https://alist.nn.ci/tool/baidu/callback&scope=basic,netdisk&qrcode=1) to get the refresh token.
 
 
 
-### **Root folder path**
+## **Root folder path**
 The root foler to mount, defaults to `/`
 
 - Mount a folder separately, according to the following format, `/` is the root directory, just extend to that directory if you want to mount that directory
@@ -42,7 +42,7 @@ The root foler to mount, defaults to `/`
 
 
 
-### **Custom crack ua**
+## **Custom crack ua**
 
 [**UA used when using 【Native Proxy & Crack API】**](https://github.com/alist-org/alist/issues/5602#issuecomment-1831188682)
 
@@ -50,7 +50,8 @@ The root foler to mount, defaults to `/`
 
 
 
-### **Download api**
+## **Download api**
+
 - official: The official interface, very stable, but for larger files, UA needs to be modified and the speed is slow (SVIP speed fast)
 - crack: unofficial interface，You must modify the UA and some files may not have a speed limit, but it will be unstable (not guaranteed 100%availability) Need to use a version greater than `3.19.0`
   -  ==Need to change the UA to`netdisk`==，Modification method refer to [add-user-agent-user-example](#add-user-agent-usage-example)
@@ -64,14 +65,13 @@ The root foler to mount, defaults to `/`
 	error_msg: "hit black userlist , hit illeage dlna",
 	request_id: 541111111111111140
 }
-# This is not a mistake, this is a limit, please do not panic.
 ```
 
 <br/>
 
 
 
-### **Add "User-Agent" usage example**
+## **Add "User-Agent" usage example**
 
 ::::danger If you don't know how to set "User-Agent" see here
 
@@ -134,7 +134,23 @@ If you use the webpage to modify the **`user-agent`**, you do not need to config
 
 ::::
 
-### **The default download method used**
+## **Upload Config**
+
+Official Documentation: [百度网盘开放平台 - 上传 - 能力说明](https://pan.baidu.com/union/doc/3ksg0s9ye)
+
+> Baidu Netdisk requires that each slice be uploaded within 30 seconds, so excessively high concurrency during file uploads may result in a significant number of failures.
+
+- Upload Threads: The number of slices to upload concurrently.
+- Upload API: The domain endpoint used for uploading.
+- Custom Upload Slice Size: Allows you to specify the size of each slice. Note that there are limitations, and this feature is available to VIPs only.
+- Low Bandwidth Upload Mode: Attempts to address the frequent `Client.Timeout exceeded while awaiting headers` errors encountered in low upload bandwidth scenarios (e.g., residential broadband). When enabled, it uses the smallest possible slice size.
+
+
+<br/>
+
+
+
+## **The default download method used**
 
 ```mermaid
 ---
