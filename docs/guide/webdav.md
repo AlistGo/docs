@@ -29,6 +29,8 @@ star: true
 
 - If you want to add, delete or modify files, you also need to open the permission of `Webdav Manage`
 
+Besides, since v3.42.0, writing to WebDAV not only requires the `Webdav Manage` permission but also basic permissions such as `rename`, `delete`, and `copy`.
+
 :::
 
 ### **WebDAV config**
