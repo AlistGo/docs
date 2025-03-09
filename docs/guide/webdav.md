@@ -27,9 +27,13 @@ star: true
 - If you only read and do not modify, you only need to open `Webdav Read`
 
 
-- If you want to add, delete or modify files, you also need to open the permission of `Webdav Manage`
+- If you want to add, delete or modify files, you need to open `Webdav manage` permissions and also need `Make dir or upload`, `Delete`, `Rename`, `Move`, `Copy` and other permissions. You can selectively open them according to your needs.
 
 :::
+
+<br/>
+
+
 
 ### **WebDAV config**
 
@@ -44,6 +48,10 @@ star: true
 | Password | Same as web password        |
 
 Can't fill in? [Click to view Fill in Example](#webdav-fill-in-example)
+
+<br/>
+
+
 
 ### **WebDav Support**
 
@@ -68,6 +76,10 @@ Can't fill in? [Click to view Fill in Example](#webdav-fill-in-example)
 | BaiduNetdisk     |  ✅  |    ✅    |  ✅   |   ✅   |  ✅  |  ✅  |   ✅   |
 | Quark            |  ✅  |    ✅    |  ✅   |   ✅   |  ✅  |  ✅  |   ✅   |
 | KodBox           |  ✅  |    ✅    |  ✅   |   ✅   |  ✅  |  ✅  |   ✅   |
+
+<br/>
+
+
 
 ## **Software that can be used to mount WebDav**
 

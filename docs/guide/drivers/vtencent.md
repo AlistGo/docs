@@ -1,6 +1,6 @@
 ---
 # This is the icon of the page
-icon: iconfont icon-state
+icon: fa-solid fa-x
 # This control sidebar order
 order: 19
 # A page can have multiple categories
@@ -15,11 +15,27 @@ tag:
 sticky: true
 # this page will appear in starred articles
 star: true
+watermark:
+  content: The personal version has been officially offline on December 31, 2024
+  globalAlpha: 0.4
+  rotate: 10
+  width: 650
+  height: 300
 ---
 
 # vtencent 
 
 vtencent Official website link：**https://app.v.tencent.com**
+
+:::caution The service has been shut down and cannot be used.
+
+The personal version of vtencent has been officially offline on ==December 31, 2024==.
+
+- **https://mp.weixin.qq.com/s/bfKVkF3iVMMQsh6FNo_UTg**
+
+![](/img/drivers/vtencent/vtencent_close.png)
+
+:::
 
 <br/>
 

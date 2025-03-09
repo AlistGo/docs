@@ -289,7 +289,9 @@ Alist 后台参数也记得写好保存，写好保存后也要回到个人资�
 
 相当于注册的用户默认开通哪些权限，就如下面所示的
 
-![](/img/advanced/sso-permission.png)
+![](/img/advanced/sso-permission_b.png#light)
+
+![](/img/advanced/sso-permission_h.png#dark)
 
 默认为0，不开通任何权限
 

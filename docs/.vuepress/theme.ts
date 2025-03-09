@@ -77,6 +77,11 @@ export default hopeTheme(
       // container: true,
     },
     plugins: {
+      // 水印选项 
+      // 参考配置：https://zhensherlock.github.io/watermark-js-plus/zh/config
+      watermark:{
+        enabled: false,
+      },
       // 搜索从设置转移到主题
       docsearch:{
         appId: "ECAR405NMH",

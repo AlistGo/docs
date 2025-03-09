@@ -38,6 +38,10 @@ star: true
 
 要通过程序代理下载的文件扩展名
 
+## **代理忽略头部**
+
+详情查看： **https://github.com/alist-org/alist/issues/2763**
+
 ## **外部预览**
 
 一个包含外部预览设置的 json 对象，定义为
@@ -113,11 +117,21 @@ interface {
 
 是否自动播放视频文件。
 
-## **代理忽略头部**
+## **打开压缩包文件时默认预览**
 
-详情查看： **https://github.com/alist-org/alist/issues/2763**
+打开此选项后，默认会对压缩包格式文件进行预览(如下图所示)，会消耗一些服务器流量，但不会全部下载，如果要关闭压缩包格式首选预览，此选项关闭，首选项就是下载模式
 
-### **强制预览**
+![](/img/advanced/user_read_archives_light.png#light)
+
+![](/img/advanced/user_read_archives_dark.png#dark)
+
+<br/>
+
+
+
+-----
+
+## **强制预览**
 
 可以通过 `type` 请求参数来强制设置预览类型。
 

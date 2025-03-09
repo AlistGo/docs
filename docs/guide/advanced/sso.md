@@ -256,7 +256,7 @@ In addition to the four that `AList` has already connected to `GitHub Dingding G
 https://your.alist.domain/api/auth/sso_callback\?method=sso_get_token
 https://your.alist.domain/api/auth/sso_callback\?method=get_sso_id
 ```
-    
+
     Please note the \ character before ? as an escape character for the regex used for this URI is mandatory.
   7. Make note of the signing key selected as you will need it later. This guide assumes you will use the default `authentik Self-signed Certificate`
   8. Save the new provider
@@ -341,7 +341,9 @@ It can be the root directory `/`, or the path `/path/test/Demo` specified by the
 
 It is equivalent to which permissions are enabled by default for registered users, as shown below
 
-![](/img/advanced/sso-permission.png)
+![](/img/advanced/sso-permission_b.png#light)
+
+![](/img/advanced/sso-permission_h.png#dark)
 
 The default is 0, no permission is enabled
 

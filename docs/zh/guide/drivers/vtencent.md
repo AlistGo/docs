@@ -1,6 +1,6 @@
 ---
 # This is the icon of the page
-icon: iconfont icon-state
+icon: fa-solid fa-x
 # This control sidebar order
 order: 19
 # A page can have multiple categories
@@ -15,11 +15,27 @@ tag:
 sticky: true
 # this page will appear in starred articles
 star: true
+watermark:
+  content: 个人版于 2024年12月31日 正式下线
+  globalAlpha: 0.3
+  rotate: 10
+  width: 650
+  height: 300
 ---
 
 # 腾讯智能创作平台
 
 腾讯智能创作平台官网链接：**https://app.v.tencent.com**
+
+:::caution 已下线关闭服务，无法使用
+
+智能创作平台个人版于 ==2024年12月31日== 正式下线。
+
+- **https://mp.weixin.qq.com/s/bfKVkF3iVMMQsh6FNo_UTg**
+
+![](/img/drivers/vtencent/vtencent_close.png)
+
+:::
 
 <br/>
 

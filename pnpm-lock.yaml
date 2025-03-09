@@ -68,7 +68,7 @@ importers:
         version: 2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)
       vuepress-theme-hope:
         specifier: 2.0.0-rc.71
-        version: 2.0.0-rc.71(@vuepress/plugin-docsearch@2.0.0-rc.74(@algolia/client-search@5.20.1)(search-insights@2.11.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)))(artplayer@5.2.2)(chart.js@4.4.7)(dashjs@4.7.4)(echarts@5.6.0)(flowchart.ts@3.0.1)(hls.js@1.5.20)(katex@0.16.21)(markdown-it@14.1.0)(mathjax-full@3.2.2)(mermaid@11.4.1)(mpegts.js@1.8.0)(sass@1.84.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
+        version: 2.0.0-rc.71(@vuepress/plugin-docsearch@2.0.0-rc.74(@algolia/client-search@5.20.1)(search-insights@2.11.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)))(@vuepress/plugin-watermark@2.0.0-rc.74(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)))(artplayer@5.2.2)(chart.js@4.4.7)(dashjs@4.7.4)(echarts@5.6.0)(flowchart.ts@3.0.1)(hls.js@1.5.20)(katex@0.16.21)(markdown-it@14.1.0)(mathjax-full@3.2.2)(mermaid@11.4.1)(mpegts.js@1.8.0)(sass@1.84.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
 
 packages:
 
@@ -1442,6 +1442,11 @@ packages:
 
   '@vuepress/plugin-theme-data@2.0.0-rc.74':
     resolution: {integrity: sha512-6uQPv4kRakqcEPWmL3ZYKqjXqzOVycAdlr7oQlxs23E8CO59/QyIcrkloHPsdI+VhAA3v46NdiVD2TIrESRm6A==}
+    peerDependencies:
+      vuepress: 2.0.0-rc.19
+
+  '@vuepress/plugin-watermark@2.0.0-rc.74':
+    resolution: {integrity: sha512-BGHqB3mgvJJ8orM3NZYq872bTtXbG5wS6FMP2ySGThnKkkbgKjCkRLnzEOwCJhDZ1ZtvHxxEWkyTYrLbDBLi4w==}
     peerDependencies:
       vuepress: 2.0.0-rc.19
 
@@ -2969,6 +2974,9 @@ packages:
     peerDependencies:
       vue: ^3.0.11
 
+  watermark-js-plus@1.5.8:
+    resolution: {integrity: sha512-dSQHNSq8hVe6abEAPGKPcjq88XKWu4wiikeELyUlcs48xqQOWG3eWeWNLHcG6Pegujp8HTLXPzKsDvzFLKC+iA==}
+
   webworkify-webpack@https://codeload.github.com/xqq/webworkify-webpack/tar.gz/24d1e719b4a6cac37a518b2bb10fe124527ef4ef:
     resolution: {tarball: https://codeload.github.com/xqq/webworkify-webpack/tar.gz/24d1e719b4a6cac37a518b2bb10fe124527ef4ef}
     version: 2.1.5
@@ -4447,6 +4455,17 @@ snapshots:
       vuepress: 2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)
     transitivePeerDependencies:
       - typescript
+
+  '@vuepress/plugin-watermark@2.0.0-rc.74(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))':
+    dependencies:
+      '@vuepress/helper': 2.0.0-rc.74(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
+      '@vueuse/core': 12.5.0
+      vue: 3.5.13
+      vuepress: 2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)
+      watermark-js-plus: 1.5.8
+    transitivePeerDependencies:
+      - typescript
+    optional: true
 
   '@vuepress/shared@2.0.0-rc.19':
     dependencies:
@@ -5989,7 +6008,7 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  vuepress-theme-hope@2.0.0-rc.71(@vuepress/plugin-docsearch@2.0.0-rc.74(@algolia/client-search@5.20.1)(search-insights@2.11.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)))(artplayer@5.2.2)(chart.js@4.4.7)(dashjs@4.7.4)(echarts@5.6.0)(flowchart.ts@3.0.1)(hls.js@1.5.20)(katex@0.16.21)(markdown-it@14.1.0)(mathjax-full@3.2.2)(mermaid@11.4.1)(mpegts.js@1.8.0)(sass@1.84.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)):
+  vuepress-theme-hope@2.0.0-rc.71(@vuepress/plugin-docsearch@2.0.0-rc.74(@algolia/client-search@5.20.1)(search-insights@2.11.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)))(@vuepress/plugin-watermark@2.0.0-rc.74(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)))(artplayer@5.2.2)(chart.js@4.4.7)(dashjs@4.7.4)(echarts@5.6.0)(flowchart.ts@3.0.1)(hls.js@1.5.20)(katex@0.16.21)(markdown-it@14.1.0)(mathjax-full@3.2.2)(mermaid@11.4.1)(mpegts.js@1.8.0)(sass@1.84.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13)):
     dependencies:
       '@vuepress/helper': 2.0.0-rc.74(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
       '@vuepress/plugin-active-header-links': 2.0.0-rc.74(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
@@ -6031,6 +6050,7 @@ snapshots:
       vuepress-shared: 2.0.0-rc.71(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
     optionalDependencies:
       '@vuepress/plugin-docsearch': 2.0.0-rc.74(@algolia/client-search@5.20.1)(search-insights@2.11.0)(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
+      '@vuepress/plugin-watermark': 2.0.0-rc.74(vuepress@2.0.0-rc.19(@vuepress/bundler-vite@2.0.0-rc.19(@types/node@18.19.75)(sass@1.84.0)(yaml@2.7.0))(vue@3.5.13))
       sass: 1.84.0
     transitivePeerDependencies:
       - '@vue/repl'
@@ -6081,6 +6101,9 @@ snapshots:
       vdirs: 0.1.8(vue@3.5.13)
       vooks: 0.2.12(vue@3.5.13)
       vue: 3.5.13
+
+  watermark-js-plus@1.5.8:
+    optional: true
 
   webworkify-webpack@https://codeload.github.com/xqq/webworkify-webpack/tar.gz/24d1e719b4a6cac37a518b2bb10fe124527ef4ef: {}
 

@@ -4,6 +4,7 @@ export const zh = sidebar({
   "/zh/guide/": "structure",
   "/zh/config/": "structure",
   "/zh/faq/": "structure",
+  "/zh/tool/": false,
   "/zh/": [
     "",
     {

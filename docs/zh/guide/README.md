@@ -66,7 +66,7 @@ category:
 - [x] [UC网盘/TV](https://drive.uc.cn/)
 - [x] [Dropbox](https://www.dropbox.com)
 - [x] [腾讯微云](https://www.weiyun.com/)
-- [x] [腾讯智能创作平台](https://app.v.tencent.com/)
+- [ ] [腾讯智能创作平台](https://app.v.tencent.com/)
 - [x] [超星星小组盘](../guide/drivers/chaoxing.md)
 - [x] [曲奇云盘](https://quqi.com)
 - [x] [网易云音乐云盘](../guide/drivers/163music.md)

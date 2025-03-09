@@ -52,14 +52,14 @@ The root foler to mount, defaults to `/`
 
 ## **Download api**
 
-- official: The official interface, very stable, but for larger files, UA needs to be modified and the speed is slow (SVIP speed fast)
-- crack: unofficial interface，You must modify the UA and some files may not have a speed limit, but it will be unstable (not guaranteed 100%availability) Need to use a version greater than `3.19.0`
-  -  ==Need to change the UA to`netdisk`==，Modification method refer to [add-user-agent-user-example](#add-user-agent-usage-example)
-  -  Or turn on the Web proxy, you do not need to modify the UA (you need a large broadband to use it stably)
-  -  It is limited to play/download **`video (only tested in the mp4 format other formats are not tested)`**,If it is other format files, such a prompt will appear
-  -  This is not a mistake, this is a limit, please do not panic.
+- Official: The official interface, very stable, but for larger files, UA needs to be modified and the speed is slow (SVIP speed fast)
+- Crack: unofficial interface，**Seems to be no longer available** ~~You must modify the UA and some files may not have a speed limit, but it will be unstable (not guaranteed 100%availability) Need to use a version greater than `3.19.0`~~
+  -  ~~==Need to change the UA to`netdisk`==，Modification method refer to [add-user-agent-user-example](#add-user-agent-usage-example)~~
+  -  ~~Or turn on the Web proxy, you do not need to modify the UA (you need a large broadband to use it stably)~~
+  -  ~~It is limited to play/download **`video (only tested in the mp4 format other formats are not tested)`**,If it is other format files, such a prompt will appear~~
+  -  ~~This is not a mistake, this is a limit, please do not panic.~~
 
-```json{3}
+```json{2-4}
 {
 	error_code: 31119,
 	error_msg: "hit black userlist , hit illeage dlna",

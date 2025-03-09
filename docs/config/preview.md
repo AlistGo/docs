@@ -38,6 +38,10 @@ The extensions of the files you want to preview as image, split by `,`, such as 
 
 The extensions of the files you want to separately set to download through proxy
 
+### **Proxy ignore headers**
+
+For details, please check:  **https://github.com/alist-org/alist/issues/2763**
+
 ### **External previews**
 
 A json object that contains the external preview settings, It is defined as
@@ -112,9 +116,19 @@ Whether to automatically play audio files.
 
 Whether to automatically play video files.
 
-### **Proxy ignore headers**
+### **Preview by default when opening archives**
 
-For details, please check:  **https://github.com/alist-org/alist/issues/2763**
+After turning on this option, compressed package format files will be previewed by default (as shown in the figure below), which will consume some server traffic, but will not download them all, If you want to turn off the preferred preview of the compressed format, this option is turned off, and the preference is the download mode
+
+![](/img/advanced/user_read_archives_light.png#light)
+
+![](/img/advanced/user_read_archives_dark.png#dark)
+
+<br/>
+
+
+
+-----
 
 ### **Force preview**
 
