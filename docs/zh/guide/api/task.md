@@ -20,12 +20,14 @@ star: true
 
 alist中的任务管理可以分为：
 
-| 接口名                     | 说明             |
-| -------------------------- | ---------------- |
-| /upload                    | 上传任务         |
-| /copy                      | 复制任务         |
+| 接口名                      | 说明           |
+| -------------------------- | ------------- |
+| /upload                    | 上传任务        |
+| /copy                      | 复制任务        |
 | /offline_download          | 离线下载任务     |
 | /offline_download_transfer | 离线下载转存任务 |
+| /decompress                | 解压任务        |
+| /decompress_upload         | 解压转存任务    |
 
 每种任务都有以下接口：
 
@@ -65,7 +67,7 @@ POST /api/task/upload/info
   "message": "success",
   "data": [
     {
-      "id": "1",
+      "id": "WC7gsoTr5CHkExN9dmyxs",
       "name": "upload 1.png to [/s](/test)",
       "creator": "admin",
       "creator_role": 2,
@@ -97,7 +99,7 @@ POST /api/task/upload/info
 | » message       | string   | true  | none | 信息             | none                            |
 | » data          | [object] | true  | none |                  | none                            |
 | »» id           | string   | false | none | id               | none                            |
-| »» name         | string   | false | none | 任务名           | none                            |
+| »» name         | string   | false | none | 任务名          | 任务的命名方式见本文末尾           |
 | »» creator      | string   | false | none | 任务创建者用户名 | none                            |
 | »» creator_role | integer  | false | none | 任务创建者角色   | 0: 普通用户，1: 访客，2: 管理员 |
 | »» state        | string   | false | none | 任务完成状态     | none                            |
@@ -128,7 +130,7 @@ GET /api/task/upload/done
   "message": "success",
   "data": [
     {
-      "id": "1",
+      "id": "WC7gsoTr5CHkExN9dmyxs",
       "name": "upload 1.png to [/s](/test)",
       "creator": "example_user",
       "creator_role": 0,
@@ -160,7 +162,7 @@ GET /api/task/upload/done
 | » message       | string   | true  | none | 信息             | none                            |
 | » data          | [object] | true  | none |                  | none                            |
 | »» id           | string   | false | none | id               | none                            |
-| »» name         | string   | false | none | 任务名           | none                            |
+| »» name         | string   | false | none | 任务名           | 任务的命名方式见本文末尾             |
 | »» creator      | string   | false | none | 任务创建者用户名 | none                            |
 | »» creator_role | integer  | false | none | 任务创建者角色   | 0: 普通用户，1: 访客，2: 管理员 |
 | »» state        | string   | false | none | 任务完成状态     | none                            |
@@ -191,7 +193,7 @@ GET /api/task/upload/undone
   "message": "success",
   "data": [
     {
-      "id": "1",
+      "id": "WC7gsoTr5CHkExN9dmyxs",
       "name": "upload 1.png to [/s](/test)",
       "creator": "guest",
       "creator_role": 1,
@@ -223,7 +225,7 @@ GET /api/task/upload/undone
 | » message       | string   | true  | none | 信息             | none                            |
 | » data          | [object] | true  | none |                  | none                            |
 | »» id           | string   | false | none | id               | none                            |
-| »» name         | string   | false | none | 任务名           | none                            |
+| »» name         | string   | false | none | 任务名           | 任务的命名方式见本文末尾            |
 | »» creator      | string   | false | none | 任务创建者用户名 | none                            |
 | »» creator_role | integer  | false | none | 任务创建者角色   | 0: 普通用户，1: 访客，2: 管理员 |
 | »» state        | string   | false | none | 任务完成状态     | none                            |
@@ -608,3 +610,36 @@ POST /api/task/upload/retry_some
 | » message | string   | true  | none | 信息     | none                                       |
 | » data    | object | true  | none |          | 不在此对象中的任务表示重试成功且无错误信息 |
 | »» 任务id | string   | false | none | 错误信息 | none                                       |
+## 备注
+
+### 任务的命名方式
+
+- 上传：
+  ```text
+  upload 文件名 to [驱动挂载点](驱动内路径)
+  ```
+- 复制：
+  ```text
+  copy [源文件驱动挂载点](源文件驱动内路径) to [目标驱动挂载点](目标驱动内路径)
+  ```
+- 离线下载：
+  ```text
+  download 文件名 to (目标路径)
+  ```
+- 离线下载转存：
+  - 驱动离线下载：
+    ```text
+    transfer [源文件驱动挂载点](源文件挂载点) to [目标驱动挂载点](目标驱动内路径)
+    ```
+  - 本地离线下载：
+    ```text
+    transfer [](源文件本地路径) to [目标驱动挂载点](目标驱动内路径)
+    ```
+- 解压：
+  ```text
+  decompress [源文件驱动挂载点](源文件驱动内路径)[压缩文件内部路径] to [目标驱动挂载点](目标驱动内路径) with password <解压密码>
+  ```
+- 解压转存：
+  ```text
+  upload 文件名 to [驱动挂载点](驱动内路径)
+  ```

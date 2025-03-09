@@ -35,7 +35,7 @@ Then find the offline download button in the lower right corner, and choose to u
 If you use **docker**, please map the following two default paths by yourself. (mapped to the same directory on the host machine)
 
 - **/opt/alist/data/temp/aria2**
-- **/opt/alist/data/temp/qbittorrent**
+- **/opt/alist/data/temp/qBittorrent**
 
 :::
 
