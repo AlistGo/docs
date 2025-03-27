@@ -32,7 +32,7 @@ docker run -d --restart=unless-stopped -v /etc/alist:/opt/alist/data -p 5244:524
 version: '3.3'
 services:
   alist:
-    image: 'xhofe/alist:beta'
+    image: 'xhofe/alist:latest'
     container_name: alist
     volumes:
       - '/etc/alist:/opt/alist/data'
