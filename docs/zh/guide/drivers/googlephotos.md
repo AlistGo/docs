@@ -68,7 +68,7 @@ star: true
 
 
 
-## **两个注意事项：**
+## **三个注意事项：**
 
 1. failed get objs: failed to list objs: Request had insufficient authentication scopes.: []
    - 是因为在获取授权的时候没有勾选 相册权限（查看上面提到的图片） `查看和整理您的Google相册媒体库中的内容,向媒体库上传内容。`
@@ -76,6 +76,7 @@ star: true
    
 2. failed get objs: failed to list objs: Photos Library API has not been used in project ... before or it is disabled. Enable it by visiting <https://console.developers.google.com/apis/api/photoslibrary.googleapis.com/overview> then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.: []
    - 是因为对应的项目没有开启 **`Photos Library API`**  谷歌相册API
+3. 若在Windows上使用clash，只显示全部媒体、全部影集、共享影集，但进入文件夹提示failed get objs: failed to list objs，请切换道tun模式，参照https://github.com/alist-org/alist/issues/5056
 
 ### **挂载展示**
 
