@@ -54,7 +54,9 @@ Key: 'Storage.MountPath' Error:Field validation for 'MountPath' failed on the 'r
 
 随便你想填什么，只是提醒你这个存储是什么
 
-### **从 `已挂载的存储` 中引用认证、令牌等，同一个Token多个网盘使用** <Badge text="≥ 3.42.0" type="info" vertical="middle" />
+### **引用**  <Badge text="≥ 3.42.0" type="info" vertical="middle" />
+
+从 `已挂载的存储` 中引用认证、令牌等，同一个Token多个网盘使用
 
 目前仅支持如下网盘：
 
@@ -62,6 +64,7 @@ Key: 'Storage.MountPath' Error:Field validation for 'MountPath' failed on the 'r
 - 阿里云盘Open
 - 天翼云盘客户端
 - 123云盘分享（引用123云盘）
+- Cloudreve V3 / V4
 
 在存储设置中将`备注(Remark)`的第一行设置为：**ref:/挂载路径**
 

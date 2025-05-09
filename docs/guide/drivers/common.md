@@ -54,7 +54,9 @@ When there are multiple accounts, it is used for sorting, The smaller the more f
 
 Anything you want to fill in, which is just for reminding you what this storage is
 
-### **Reference authentication, tokens, etc. from `Mounted Storage`, and use the same token for multiple network disks** <Badge text="≥ 3.42.0" type="info" vertical="middle" />
+### **Reference** <Badge text="≥ 3.42.0" type="info" vertical="middle" />
+
+Reference authentication, tokens, etc. from `Mounted Storage`, and use the same token for multiple network disks
 
 Currently only the following network disks are supported:
 
@@ -62,6 +64,7 @@ Currently only the following network disks are supported:
 - AliyundriveOpen
 - 189CloudPC
 - 123PanShare（ref 123Pan）
+- Cloudreve V3 / V4
 
 In the storage settings, set the first line of `Remark` to: **ref:/mount path**
 
