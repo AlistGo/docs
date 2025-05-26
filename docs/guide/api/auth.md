@@ -28,8 +28,8 @@ POST /api/auth/login
 
 ```json
 {
-  "username": "{{alist_username}}",
-  "password": "{{alist_password}}"
+  "Username": "{{alist_username}}",
+  "Password": "{{alist_password}}"
 }
 ```
 
@@ -38,8 +38,8 @@ POST /api/auth/login
 | 名称       | 位置 | 类型   | 必选 | 中文名     | 说明       |
 | ---------- | ---- | ------ | ---- | ---------- | ---------- |
 | body       | body | object | 否   |            | none       |
-| » username | body | string | 是   | 用户名     | 用户名     |
-| » password | body | string | 是   | 密码       | 密码       |
+| » Username | body | string | 是   | 用户名     | 用户名     |
+| » Password | body | string | 是   | 密码       | 密码       |
 | » otp_code | body | string | 否   | 二步验证码 | 二步验证码 |
 
 ### 返回示例
