@@ -2,4 +2,4 @@
 User-agent:*
 Disallow:
 
-Sitemap: https://alist.nn.ci/sitemap.xml
+Sitemap: https://alistgo.com/sitemap.xml

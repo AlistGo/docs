@@ -48,10 +48,10 @@ if [ "$(id -u)" != "0" ]; then
   echo -e "\r\n${RED_COLOR}出错了，请使用 root 权限重试！${RES}\r\n" 1>&2
   exit 1
 elif [ "$ARCH" == "UNKNOWN" ]; then
-  echo -e "\r\n${RED_COLOR}出错了${RES}，一键安装目前仅支持 x86_64和arm64 平台。\r\n其它平台请参考：${GREEN_COLOR}https://alist.nn.ci${RES}\r\n"
+  echo -e "\r\n${RED_COLOR}出错了${RES}，一键安装目前仅支持 x86_64和arm64 平台。\r\n其它平台请参考：${GREEN_COLOR}https://alistgo.com${RES}\r\n"
   exit 1
 elif ! command -v systemctl >/dev/null 2>&1; then
-  echo -e "\r\n${RED_COLOR}出错了${RES}，无法确定你当前的 Linux 发行版。\r\n建议手动安装：${GREEN_COLOR}https://alist.nn.ci${RES}\r\n"
+  echo -e "\r\n${RED_COLOR}出错了${RES}，无法确定你当前的 Linux 发行版。\r\n建议手动安装：${GREEN_COLOR}https://alistgo.com${RES}\r\n"
   exit 1
 else
   if command -v netstat >/dev/null 2>&1; then
