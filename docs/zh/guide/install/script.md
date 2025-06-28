@@ -67,9 +67,9 @@ curl -fsSL "https://alistgo.com/beta.sh" | bash -s uninstall
 # Install
 curl -fsSL "https://alistgo.com/v3.sh" -o v3.sh && bash v3.sh install /root
 # update
-curl -fsSL "https://alistgo.com/v3.sh" -o v3.sh && bash v3.sh update /root
+curl -fsSL "https://alistgo.com/v3.sh" -o v3.sh && bash v3.sh update
 # Uninstall
-curl -fsSL "https://alistgo.com/v3.sh" -o v3.sh && bash v3.sh uninstall /root
+curl -fsSL "https://alistgo.com/v3.sh" -o v3.sh && bash v3.sh uninstall
 ```
 
 @tab 测试版
