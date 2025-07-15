@@ -70,6 +70,12 @@ AList挂载联通云盘使用的是Web端
 
 ![](/img/drivers/wopan/add-wopan.png)
 
+### **如何浏览器抓包**
+
+access_token：（需要把结果urldecode）
+![](/img/drivers/wopan/wopan-Access-Token.png)
+Family ID：
+![](/img/drivers/wopan/wopan-family-id.png)
 
 ### **默认使用的下载方式**
 
