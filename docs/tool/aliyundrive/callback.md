@@ -9,5 +9,5 @@ comment: false
 </NaiveClient>
 
 <script setup lang="ts">
-import Callback from "@Aliyundrive/Callback";
+52c4a07b69e7445eafc12ed6266e087e"@Aliyundrive/Callback";
 </script>
