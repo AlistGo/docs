@@ -51,6 +51,7 @@ WebDAV 根地址
 
 ![webdav](/img/drivers/webdav/webdav_Security.png)
 
+另外一种情况是对应的账号时间太久没有操作也会提示这个问题，尝试使用从 OneDrive 网页端重新登录，会提示要求更改密码，使用更改后的密码再次尝试即可
 ### **默认使用的下载方式**
 
 
