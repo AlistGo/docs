@@ -157,6 +157,59 @@ CHECK() {
 ADMIN_USER=""
 ADMIN_PASS=""
 
+# 构建正确的文件名函数
+build_filename() {
+    local version="$1"
+    local os_name=$(uname -s | tr '[:upper:]' '[:lower:]')
+    local arch_name=""
+    
+    # 根据系统架构确定文件名中的架构部分
+    if [ "$ARCH" = "amd64" ]; then
+        arch_name="amd64"
+    elif [ "$ARCH" = "arm64" ]; then
+        arch_name="arm64"
+    else
+        echo "alist-linux-musl-$ARCH.tar.gz"  # 回退到原来的格式
+        return 0
+    fi
+    
+    # 根据操作系统确定文件名
+    case "$os_name" in
+        "linux")
+            echo "alist-$version-linux-musl-$arch_name.tar.gz"
+            ;;
+        "darwin")
+            echo "alist-$version-darwin-$arch_name.tar.gz"
+            ;;
+        "freebsd")
+            echo "alist-$version-freebsd-$arch_name.tar.gz"
+            ;;
+        *)
+            echo "alist-$version-linux-musl-$arch_name.tar.gz"  # 默认使用linux-musl
+            ;;
+    esac
+}
+
+# 获取最新版本信息的函数
+get_latest_version() {
+    local api_url="https://dapi.alistgo.com/v0/version/latest"
+    local version_info=$(curl -s --connect-timeout 10 "$api_url" 2>/dev/null)
+    
+    if [ $? -eq 0 ] && [ -n "$version_info" ]; then
+        # 解析 JSON 获取版本号和文件名
+        local version=$(echo "$version_info" | grep -o '"version":"[^"]*"' | cut -d'"' -f4)
+        local platform=$(echo "$version_info" | grep -o '"platform":"[^"]*"' | cut -d'"' -f4)
+        local download_url=$(echo "$version_info" | grep -o '"download_url":"[^"]*"' | cut -d'"' -f4)
+        
+        if [ -n "$version" ] && [ -n "$platform" ] && [ -n "$download_url" ]; then
+            echo "$version|$platform|$download_url"
+            return 0
+        fi
+    fi
+    
+    return 1
+}
+
 # 添加下载函数，包含重试机制
 download_file() {
     local url="$1"
@@ -189,30 +242,98 @@ INSTALL() {
   # 保存当前目录
   CURRENT_DIR=$(pwd)
   
+  # 获取最新版本信息
+  echo -e "${GREEN_COLOR}正在获取最新版本信息...${RES}"
+  local version_info=$(get_latest_version)
+  
+  if [ $? -eq 0 ] && [ -n "$version_info" ]; then
+    local version=$(echo "$version_info" | cut -d'|' -f1)
+    local platform=$(echo "$version_info" | cut -d'|' -f2)
+    local download_url=$(echo "$version_info" | cut -d'|' -f3)
+    
+    echo -e "${GREEN_COLOR}最新版本: $version${RES}"
+    
+    # 询问用户选择下载源
+    echo -e "${GREEN_COLOR}请选择下载源：${RES}"
+    echo -e "${GREEN_COLOR}1. 使用官方镜像 (推荐)${RES}"
+    echo -e "${GREEN_COLOR}2. 使用 GitHub 源${RES}"
+    read -p "请选择 [1-2]: " download_choice
+    
+    case "${download_choice:-1}" in
+      1)
+        # 使用官方镜像
+        local filename=$(build_filename "$version")
+        local official_url="https://alistgo.com/download/Alist/v$version/$filename"
+        echo -e "${GREEN_COLOR}使用官方镜像下载: $official_url${RES}"
+        
+        # 下载 Alist 程序
+        echo -e "\r\n${GREEN_COLOR}下载 Alist ...${RES}"
+        if ! download_file "$official_url" "/tmp/alist.tar.gz"; then
+          echo -e "${RED_COLOR}官方镜像下载失败！${RES}"
+          exit 1
+        fi
+        ;;
+      2)
+        # 使用 GitHub 源
+        echo -e "${GREEN_COLOR}使用 GitHub 源下载${RES}"
+        
+        # 询问是否使用代理
+        echo -e "${GREEN_COLOR}是否使用 GitHub 代理？（默认无代理）${RES}"
+        echo -e "${GREEN_COLOR}代理地址必须为 https 开头，斜杠 / 结尾 ${RES}"
+        echo -e "${GREEN_COLOR}例如：https://ghproxy.com/ ${RES}"
+        read -p "请输入代理地址或直接按回车继续: " proxy_input
+
+        if [ -n "$proxy_input" ]; then
+          GH_PROXY="$proxy_input"
+          GH_DOWNLOAD_URL="${GH_PROXY}https://github.com/alist-org/alist/releases/latest/download"
+          echo -e "${GREEN_COLOR}已使用代理地址: $GH_PROXY${RES}"
+        else
+          GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
+          echo -e "${GREEN_COLOR}使用默认 GitHub 地址进行下载${RES}"
+        fi
+
+        # 下载 Alist 程序
+        echo -e "\r\n${GREEN_COLOR}下载 Alist ...${RES}"
+        local github_filename=$(build_filename "$version")
+        if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+          echo -e "${RED_COLOR}下载失败！${RES}"
+          exit 1
+        fi
+        ;;
+      *)
+        echo -e "${RED_COLOR}无效选择，使用默认 GitHub 源${RES}"
+        GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
+        local github_filename=$(build_filename "$version")
+        if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+          echo -e "${RED_COLOR}下载失败！${RES}"
+          exit 1
+        fi
+        ;;
+    esac
+  else
+    echo -e "${YELLOW_COLOR}无法获取最新版本信息，使用默认 GitHub 源${RES}"
+    
     # 询问是否使用代理
     echo -e "${GREEN_COLOR}是否使用 GitHub 代理？（默认无代理）${RES}"
     echo -e "${GREEN_COLOR}代理地址必须为 https 开头，斜杠 / 结尾 ${RES}"
     echo -e "${GREEN_COLOR}例如：https://ghproxy.com/ ${RES}"
     read -p "请输入代理地址或直接按回车继续: " proxy_input
 
-  # 如果用户输入了代理地址，则使用代理拼接下载链接
-  if [ -n "$proxy_input" ]; then
-    GH_PROXY="$proxy_input"
-    GH_DOWNLOAD_URL="${GH_PROXY}https://github.com/alist-org/alist/releases/latest/download"
-    echo -e "${GREEN_COLOR}已使用代理地址: $GH_PROXY${RES}"
-  else
-    # 如果不需要代理，直接使用默认链接
-    GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
-    echo -e "${GREEN_COLOR}使用默认 GitHub 地址进行下载${RES}"
-  fi
+    if [ -n "$proxy_input" ]; then
+      GH_PROXY="$proxy_input"
+      GH_DOWNLOAD_URL="${GH_PROXY}https://github.com/alist-org/alist/releases/latest/download"
+      echo -e "${GREEN_COLOR}已使用代理地址: $GH_PROXY${RES}"
+    else
+      GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
+      echo -e "${GREEN_COLOR}使用默认 GitHub 地址进行下载${RES}"
+    fi
 
-  # 下载 Alist 程序
-  echo -e "\r\n${GREEN_COLOR}下载 Alist ...${RES}"
-  
-  # 使用拼接后的 GitHub 下载地址
-  if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
-    echo -e "${RED_COLOR}下载失败！${RES}"
-    exit 1
+    # 下载 Alist 程序
+    echo -e "\r\n${GREEN_COLOR}下载 Alist ...${RES}"
+    if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
+      echo -e "${RED_COLOR}下载失败！${RES}"
+      exit 1
+    fi
   fi
 
   # 解压文件
@@ -321,38 +442,142 @@ UPDATE() {
 
     echo -e "${GREEN_COLOR}开始更新 Alist ...${RES}"
 
-    # 询问是否使用代理
-    echo -e "${GREEN_COLOR}是否使用 GitHub 代理？（默认无代理）${RES}"
-    echo -e "${GREEN_COLOR}代理地址必须为 https 开头，斜杠 / 结尾 ${RES}"
-    echo -e "${GREEN_COLOR}例如：https://ghproxy.com/ ${RES}"
-    read -p "请输入代理地址或直接按回车继续: " proxy_input
+    # 获取最新版本信息
+    echo -e "${GREEN_COLOR}正在获取最新版本信息...${RES}"
+    local version_info=$(get_latest_version)
+    
+    if [ $? -eq 0 ] && [ -n "$version_info" ]; then
+        local version=$(echo "$version_info" | cut -d'|' -f1)
+        local platform=$(echo "$version_info" | cut -d'|' -f2)
+        local download_url=$(echo "$version_info" | cut -d'|' -f3)
+        
+        echo -e "${GREEN_COLOR}最新版本: $version${RES}"
+        echo -e "${GREEN_COLOR}平台: $platform${RES}"
+        
+        # 询问用户选择下载源
+        echo -e "${GREEN_COLOR}请选择下载源：${RES}"
+        echo -e "${GREEN_COLOR}1. 使用官方镜像 (推荐)${RES}"
+        echo -e "${GREEN_COLOR}2. 使用 GitHub 源${RES}"
+        read -p "请选择 [1-2]: " download_choice
+        
+        case "${download_choice:-1}" in
+          1)
+            # 使用官方镜像
+            local filename=$(build_filename "$version")
+            local official_url="https://alistgo.com/download/Alist/v$version/$filename"
+            echo -e "${GREEN_COLOR}使用官方镜像下载: $official_url${RES}"
+            
+            # 停止 Alist 服务
+            echo -e "${GREEN_COLOR}停止 Alist 进程${RES}\r\n"
+            systemctl stop alist
 
-    # 如果用户输入了代理地址，则使用代理拼接下载链接
-    if [ -n "$proxy_input" ]; then
-        GH_PROXY="$proxy_input"
-        GH_DOWNLOAD_URL="${GH_PROXY}https://github.com/alist-org/alist/releases/latest/download"
-        echo -e "${GREEN_COLOR}已使用代理地址: $GH_PROXY${RES}"
+            # 备份二进制文件
+            cp $INSTALL_PATH/alist /tmp/alist.bak
+
+            # 下载新版本
+            echo -e "${GREEN_COLOR}下载 Alist ...${RES}"
+            if ! download_file "$official_url" "/tmp/alist.tar.gz"; then
+                echo -e "${RED_COLOR}官方镜像下载失败！${RES}"
+                echo -e "${GREEN_COLOR}正在恢复之前的版本...${RES}"
+                mv /tmp/alist.bak $INSTALL_PATH/alist
+                systemctl start alist
+                exit 1
+            fi
+            ;;
+          2)
+            # 使用 GitHub 源
+            echo -e "${GREEN_COLOR}使用 GitHub 源下载${RES}"
+            
+            # 询问是否使用代理
+            echo -e "${GREEN_COLOR}是否使用 GitHub 代理？（默认无代理）${RES}"
+            echo -e "${GREEN_COLOR}代理地址必须为 https 开头，斜杠 / 结尾 ${RES}"
+            echo -e "${GREEN_COLOR}例如：https://ghproxy.com/ ${RES}"
+            read -p "请输入代理地址或直接按回车继续: " proxy_input
+
+            if [ -n "$proxy_input" ]; then
+                GH_PROXY="$proxy_input"
+                GH_DOWNLOAD_URL="${GH_PROXY}https://github.com/alist-org/alist/releases/latest/download"
+                echo -e "${GREEN_COLOR}已使用代理地址: $GH_PROXY${RES}"
+            else
+                GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
+                echo -e "${GREEN_COLOR}使用默认 GitHub 地址进行下载${RES}"
+            fi
+
+            # 停止 Alist 服务
+            echo -e "${GREEN_COLOR}停止 Alist 进程${RES}\r\n"
+            systemctl stop alist
+
+            # 备份二进制文件
+            cp $INSTALL_PATH/alist /tmp/alist.bak
+
+            # 下载新版本
+            echo -e "${GREEN_COLOR}下载 Alist ...${RES}"
+            local github_filename=$(build_filename "$version")
+            if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+                echo -e "${RED_COLOR}下载失败，更新终止${RES}"
+                echo -e "${GREEN_COLOR}正在恢复之前的版本...${RES}"
+                mv /tmp/alist.bak $INSTALL_PATH/alist
+                systemctl start alist
+                exit 1
+            fi
+            ;;
+          *)
+            echo -e "${RED_COLOR}无效选择，使用默认 GitHub 源${RES}"
+            GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
+            
+            # 停止 Alist 服务
+            echo -e "${GREEN_COLOR}停止 Alist 进程${RES}\r\n"
+            systemctl stop alist
+
+            # 备份二进制文件
+            cp $INSTALL_PATH/alist /tmp/alist.bak
+
+            # 下载新版本
+            echo -e "${GREEN_COLOR}下载 Alist ...${RES}"
+            local github_filename=$(build_filename "$version")
+            if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+                echo -e "${RED_COLOR}下载失败，更新终止${RES}"
+                echo -e "${GREEN_COLOR}正在恢复之前的版本...${RES}"
+                mv /tmp/alist.bak $INSTALL_PATH/alist
+                systemctl start alist
+                exit 1
+            fi
+            ;;
+        esac
     else
-        # 如果不需要代理，直接使用默认链接
-        GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
-        echo -e "${GREEN_COLOR}使用默认 GitHub 地址进行下载${RES}"
-    fi
+        echo -e "${YELLOW_COLOR}无法获取最新版本信息，使用默认 GitHub 源${RES}"
+        
+        # 询问是否使用代理
+        echo -e "${GREEN_COLOR}是否使用 GitHub 代理？（默认无代理）${RES}"
+        echo -e "${GREEN_COLOR}代理地址必须为 https 开头，斜杠 / 结尾 ${RES}"
+        echo -e "${GREEN_COLOR}例如：https://ghproxy.com/ ${RES}"
+        read -p "请输入代理地址或直接按回车继续: " proxy_input
 
-    # 停止 Alist 服务
-    echo -e "${GREEN_COLOR}停止 Alist 进程${RES}\r\n"
-    systemctl stop alist
+        if [ -n "$proxy_input" ]; then
+            GH_PROXY="$proxy_input"
+            GH_DOWNLOAD_URL="${GH_PROXY}https://github.com/alist-org/alist/releases/latest/download"
+            echo -e "${GREEN_COLOR}已使用代理地址: $GH_PROXY${RES}"
+        else
+            GH_DOWNLOAD_URL="https://github.com/alist-org/alist/releases/latest/download"
+            echo -e "${GREEN_COLOR}使用默认 GitHub 地址进行下载${RES}"
+        fi
 
-    # 备份二件
-    cp $INSTALL_PATH/alist /tmp/alist.bak
+        # 停止 Alist 服务
+        echo -e "${GREEN_COLOR}停止 Alist 进程${RES}\r\n"
+        systemctl stop alist
 
-    # 下载新版本
-    echo -e "${GREEN_COLOR}下载 Alist ...${RES}"
-    if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
-        echo -e "${RED_COLOR}下载失败，更新终止${RES}"
-        echo -e "${GREEN_COLOR}正在恢复之前的版本...${RES}"
-        mv /tmp/alist.bak $INSTALL_PATH/alist
-        systemctl start alist
-        exit 1
+        # 备份二进制文件
+        cp $INSTALL_PATH/alist /tmp/alist.bak
+
+        # 下载新版本
+        echo -e "${GREEN_COLOR}下载 Alist ...${RES}"
+        if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
+            echo -e "${RED_COLOR}下载失败，更新终止${RES}"
+            echo -e "${GREEN_COLOR}正在恢复之前的版本...${RES}"
+            mv /tmp/alist.bak $INSTALL_PATH/alist
+            systemctl start alist
+            exit 1
+        fi
     fi
 
     # 解压文件

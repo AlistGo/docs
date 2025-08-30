@@ -158,6 +158,59 @@ CHECK() {
 ADMIN_USER=""
 ADMIN_PASS=""
 
+# Function to build correct filename
+build_filename() {
+    local version="$1"
+    local os_name=$(uname -s | tr '[:upper:]' '[:lower:]')
+    local arch_name=""
+    
+    # Determine architecture part in filename based on system architecture
+    if [ "$ARCH" = "amd64" ]; then
+        arch_name="amd64"
+    elif [ "$ARCH" = "arm64" ]; then
+        arch_name="arm64"
+    else
+        echo "alist-linux-musl-$ARCH.tar.gz"  # Fallback to original format
+        return 0
+    fi
+    
+    # Determine filename based on operating system
+    case "$os_name" in
+        "linux")
+            echo "alist-$version-linux-musl-$arch_name.tar.gz"
+            ;;
+        "darwin")
+            echo "alist-$version-darwin-$arch_name.tar.gz"
+            ;;
+        "freebsd")
+            echo "alist-$version-freebsd-$arch_name.tar.gz"
+            ;;
+        *)
+            echo "alist-$version-linux-musl-$arch_name.tar.gz"  # Default to linux-musl
+            ;;
+    esac
+}
+
+# Function to get latest version information
+get_latest_version() {
+    local api_url="https://dapi.alistgo.com/v0/version/latest"
+    local version_info=$(curl -s --connect-timeout 10 "$api_url" 2>/dev/null)
+    
+    if [ $? -eq 0 ] && [ -n "$version_info" ]; then
+        # Parse JSON to get version and filename
+        local version=$(echo "$version_info" | grep -o '"version":"[^"]*"' | cut -d'"' -f4)
+        local platform=$(echo "$version_info" | grep -o '"platform":"[^"]*"' | cut -d'"' -f4)
+        local download_url=$(echo "$version_info" | grep -o '"download_url":"[^"]*"' | cut -d'"' -f4)
+        
+        if [ -n "$version" ] && [ -n "$platform" ] && [ -n "$download_url" ]; then
+            echo "$version|$platform|$download_url"
+            return 0
+        fi
+    fi
+    
+    return 1
+}
+
 # Download function with retry mechanism
 download_file() {
     local url="$1"
@@ -190,13 +243,67 @@ INSTALL() {
   # Save current directory
   CURRENT_DIR=$(pwd)
   
-  # Download Alist program
-  echo -e "\r\n${GREEN_COLOR}Downloading Alist...${RES}"
+  # Get latest version information
+  echo -e "${GREEN_COLOR}Getting latest version information...${RES}"
+  local version_info=$(get_latest_version)
   
-  # Download from GitHub source
-  if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
-    echo -e "${RED_COLOR}Download failed!${RES}"
-    exit 1
+  if [ $? -eq 0 ] && [ -n "$version_info" ]; then
+    local version=$(echo "$version_info" | cut -d'|' -f1)
+    local platform=$(echo "$version_info" | cut -d'|' -f2)
+    local download_url=$(echo "$version_info" | cut -d'|' -f3)
+    
+    echo -e "${GREEN_COLOR}Latest version: $version${RES}"
+    
+    # Ask user to choose download source
+    echo -e "${GREEN_COLOR}Please choose download source:${RES}"
+    echo -e "${GREEN_COLOR}1. Use official mirror (recommended)${RES}"
+    echo -e "${GREEN_COLOR}2. Use GitHub source${RES}"
+    read -p "Please choose [1-2]: " download_choice
+    
+    case "${download_choice:-1}" in
+      1)
+        # Use official mirror
+        local filename=$(build_filename "$version")
+        local official_url="https://alistgo.com/download/Alist/v$version/$filename"
+        echo -e "${GREEN_COLOR}Using official mirror: $official_url${RES}"
+        
+        # Download Alist program
+        echo -e "\r\n${GREEN_COLOR}Downloading Alist...${RES}"
+        if ! download_file "$official_url" "/tmp/alist.tar.gz"; then
+          echo -e "${RED_COLOR}Official mirror download failed!${RES}"
+          exit 1
+        fi
+        ;;
+      2)
+        # Use GitHub source
+        echo -e "${GREEN_COLOR}Using GitHub source${RES}"
+        
+        # Download Alist program
+        echo -e "\r\n${GREEN_COLOR}Downloading Alist...${RES}"
+        local github_filename=$(build_filename "$version")
+        if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+          echo -e "${RED_COLOR}Download failed!${RES}"
+          exit 1
+        fi
+        ;;
+      *)
+        echo -e "${RED_COLOR}Invalid choice, using default GitHub source${RES}"
+        local github_filename=$(build_filename "$version")
+        if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+          echo -e "${RED_COLOR}Download failed!${RES}"
+          exit 1
+        fi
+        ;;
+    esac
+  else
+    echo -e "${YELLOW_COLOR}Unable to get latest version information, using default GitHub source${RES}"
+    
+    # Download Alist program
+    echo -e "\r\n${GREEN_COLOR}Downloading Alist...${RES}"
+    if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
+      echo -e "${RED_COLOR}Download failed!${RES}"
+      exit 1
+    fi
   fi
 
   # Extract files
@@ -304,21 +411,111 @@ UPDATE() {
 
     echo -e "${GREEN_COLOR}Starting Alist update...${RES}"
 
-    # Stop Alist service
-    echo -e "${GREEN_COLOR}Stopping Alist process${RES}\r\n"
-    systemctl stop alist
+    # Get latest version information
+    echo -e "${GREEN_COLOR}Getting latest version information...${RES}"
+    local version_info=$(get_latest_version)
+    
+    if [ $? -eq 0 ] && [ -n "$version_info" ]; then
+        local version=$(echo "$version_info" | cut -d'|' -f1)
+        local platform=$(echo "$version_info" | cut -d'|' -f2)
+        local download_url=$(echo "$version_info" | cut -d'|' -f3)
+        
+        echo -e "${GREEN_COLOR}Latest version: $version${RES}"
+        echo -e "${GREEN_COLOR}Platform: $platform${RES}"
+        
+        # Ask user to choose download source
+        echo -e "${GREEN_COLOR}Please choose download source:${RES}"
+        echo -e "${GREEN_COLOR}1. Use official mirror (recommended)${RES}"
+        echo -e "${GREEN_COLOR}2. Use GitHub source${RES}"
+        read -p "Please choose [1-2]: " download_choice
+        
+        case "${download_choice:-1}" in
+          1)
+            # Use official mirror
+            local filename=$(build_filename "$version")
+            local official_url="https://alistgo.com/download/Alist/v$version/$filename"
+            echo -e "${GREEN_COLOR}Using official mirror: $official_url${RES}"
+            
+            # Stop Alist service
+            echo -e "${GREEN_COLOR}Stopping Alist process${RES}\r\n"
+            systemctl stop alist
 
-    # Backup binary
-    cp $INSTALL_PATH/alist /tmp/alist.bak
+            # Backup binary
+            cp $INSTALL_PATH/alist /tmp/alist.bak
 
-    # Download new version
-    echo -e "${GREEN_COLOR}Downloading Alist...${RES}"
-    if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
-        echo -e "${RED_COLOR}Download failed, update aborted${RES}"
-        echo -e "${GREEN_COLOR}Restoring previous version...${RES}"
-        mv /tmp/alist.bak $INSTALL_PATH/alist
-        systemctl start alist
-        exit 1
+            # Download new version
+            echo -e "${GREEN_COLOR}Downloading Alist...${RES}"
+            if ! download_file "$official_url" "/tmp/alist.tar.gz"; then
+                echo -e "${RED_COLOR}Official mirror download failed!${RES}"
+                echo -e "${GREEN_COLOR}Restoring previous version...${RES}"
+                mv /tmp/alist.bak $INSTALL_PATH/alist
+                systemctl start alist
+                exit 1
+            fi
+            ;;
+          2)
+            # Use GitHub source
+            echo -e "${GREEN_COLOR}Using GitHub source${RES}"
+            
+            # Stop Alist service
+            echo -e "${GREEN_COLOR}Stopping Alist process${RES}\r\n"
+            systemctl stop alist
+
+            # Backup binary
+            cp $INSTALL_PATH/alist /tmp/alist.bak
+
+            # Download new version
+            echo -e "${GREEN_COLOR}Downloading Alist...${RES}"
+            local github_filename=$(build_filename "$version")
+            if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+                echo -e "${RED_COLOR}Download failed, update aborted${RES}"
+                echo -e "${GREEN_COLOR}Restoring previous version...${RES}"
+                mv /tmp/alist.bak $INSTALL_PATH/alist
+                systemctl start alist
+                exit 1
+            fi
+            ;;
+          *)
+            echo -e "${RED_COLOR}Invalid choice, using default GitHub source${RES}"
+            
+            # Stop Alist service
+            echo -e "${GREEN_COLOR}Stopping Alist process${RES}\r\n"
+            systemctl stop alist
+
+            # Backup binary
+            cp $INSTALL_PATH/alist /tmp/alist.bak
+
+            # Download new version
+            echo -e "${GREEN_COLOR}Downloading Alist...${RES}"
+            local github_filename=$(build_filename "$version")
+            if ! download_file "${GH_DOWNLOAD_URL}/$github_filename" "/tmp/alist.tar.gz"; then
+                echo -e "${RED_COLOR}Download failed, update aborted${RES}"
+                echo -e "${GREEN_COLOR}Restoring previous version...${RES}"
+                mv /tmp/alist.bak $INSTALL_PATH/alist
+                systemctl start alist
+                exit 1
+            fi
+            ;;
+        esac
+    else
+        echo -e "${YELLOW_COLOR}Unable to get latest version information, using default GitHub source${RES}"
+        
+        # Stop Alist service
+        echo -e "${GREEN_COLOR}Stopping Alist process${RES}\r\n"
+        systemctl stop alist
+
+        # Backup binary
+        cp $INSTALL_PATH/alist /tmp/alist.bak
+
+        # Download new version
+        echo -e "${GREEN_COLOR}Downloading Alist...${RES}"
+        if ! download_file "${GH_DOWNLOAD_URL}/alist-linux-musl-$ARCH.tar.gz" "/tmp/alist.tar.gz"; then
+            echo -e "${RED_COLOR}Download failed, update aborted${RES}"
+            echo -e "${GREEN_COLOR}Restoring previous version...${RES}"
+            mv /tmp/alist.bak $INSTALL_PATH/alist
+            systemctl start alist
+            exit 1
+        fi
     fi
 
     # Extract files
