@@ -1,12 +1,15 @@
-# Alist Manager Script for Windows
-# Version: 3.57.0（仅首次安装后随机密码）
+param($Action, $InstallPath)
 
 # -----------------------------
 # 自动检测 PowerShell 版本并设置输出编码
 $psVersion = $PSVersionTable.PSVersion.Major
+
+# UTF-8 编码对象（无 BOM）
+$global:Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
 if ($psVersion -ge 7) {
     chcp 65001 > $null
-    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    [Console]::OutputEncoding = $global:Utf8NoBom
     $EncName = "UTF-8"
 } else {
     chcp 936 > $null
@@ -16,7 +19,6 @@ if ($psVersion -ge 7) {
 Write-Host "当前终端编码: $EncName" -ForegroundColor Yellow
 # -----------------------------
 
-param($Action, $InstallPath)
 if (-not $Action) { $Action = "menu" }
 if (-not $InstallPath) { $InstallPath = "C:\alist" }
 
@@ -34,12 +36,22 @@ function Write-Info($msg, $color="White") {
     $validColors = @("Black","DarkBlue","DarkGreen","DarkCyan","DarkRed",
                      "DarkMagenta","DarkYellow","Gray","DarkGray","Blue",
                      "Green","Cyan","Red","Magenta","Yellow","White")
+
+    # 转码输出，避免乱码
+    $outMsg = [System.Text.Encoding]::Default.GetString(
+                  [System.Text.Encoding]::Convert(
+                      [System.Text.Encoding]::UTF8,
+                      [Console]::OutputEncoding,
+                      [System.Text.Encoding]::UTF8.GetBytes($msg)
+                  )
+              )
+
     if ($validColors -contains $color) {
         [Console]::ForegroundColor = $color
-        [Console]::WriteLine($msg)
+        [Console]::WriteLine($outMsg)
         [Console]::ResetColor()
     } else {
-        [Console]::WriteLine($msg)
+        [Console]::WriteLine($outMsg)
     }
 }
 
@@ -64,8 +76,6 @@ function Get-LatestVersion {
     }
 }
 
-# -----------------------------
-# 获取真实物理网卡 IPv4
 function Get-LocalIP {
     $realNICs = Get-NetIPAddress -AddressFamily IPv4 | Where-Object {
         $_.IPAddress -ne "127.0.0.1" -and
@@ -80,7 +90,6 @@ function Get-LocalIP {
     return $ip
 }
 
-# -----------------------------
 function Install-NSSM {
     if (-Not (Test-Path $nssmPath)) {
         $tmpZip = "$env:TEMP\nssm.zip"
@@ -123,7 +132,6 @@ function Install-Alist {
     $version = Get-LatestVersion
     Write-Info "最新版本: $version" $Green
 
-    # 官方镜像下载 URL（根据 CPU 架构）
     $filename = "alist-$version-windows-$arch.zip"
     $officialUrl = "https://alistgo.com/download/Alist/v$version/$filename"
     $tmpZip = "$env:TEMP\alist.zip"
@@ -132,7 +140,6 @@ function Install-Alist {
 
     if (-not $success) {
         Write-Info "官方镜像下载失败！" $Yellow
-        # 提示用户选择 GitHub 下载
         Write-Info "是否使用 GitHub 源下载？" $Green
         Write-Info "1. 使用 GitHub 默认地址" $Green
         Write-Info "2. 使用 GitHub 代理" $Green
@@ -157,13 +164,11 @@ function Install-Alist {
         }
     }
 
-    # 解压
     Expand-Archive -Path $tmpZip -DestinationPath $InstallPath -Force
     Remove-Item $tmpZip -Force
     Write-Info "Alist 已安装到 $InstallPath" $Green
 }
 
-# -----------------------------
 function Invoke-AlistAdminRandom {
     if (-Not (Test-Path "$InstallPath\alist.exe")) {
         throw "未找到 $InstallPath\alist.exe，请先安装 Alist。"
@@ -185,7 +190,6 @@ function Invoke-AlistAdminRandom {
     return @{ Username = $username; Password = $password; Raw = $output }
 }
 
-# -----------------------------
 function Service-InstallAndStart {
     if (-Not (Test-Path "$InstallPath\alist.exe")) {
         Write-Info "请先安装 Alist 再注册服务" $Red
@@ -232,7 +236,6 @@ function Service-Remove {
 }
 function Service-Status { Install-NSSM; & $nssmPath status $ServiceName }
 
-# -----------------------------
 function Show-Menu {
     while ($true) {
         Clear-Host
@@ -267,7 +270,6 @@ function Show-Menu {
     }
 }
 
-# -----------------------------
 switch ($Action) {
     "install"         { Install-Alist }
     "update"          { Install-Alist }
