@@ -25,18 +25,24 @@ star: true
 
 You can get it in request header after logging in
 
-![token](/img/drivers/mediatrack-token.png)
+![token](/img/drivers/mediatrack/mediatrack-token.png)
 
 ### **Project id**
 Get from official website url:
 
-![Project id](/img/drivers/mediatrack-projectid.png)
+![Project id](/img/drivers/mediatrack/mediatrack-projectid.png)
 
 ### **Root folder id**
 
 Get it from the request after logging in
 
-![id](/img/drivers/mediatrack-rootid.png)
+![id](/img/drivers/mediatrack/mediatrack-rootid.png)
+
+## **Device fingerprint**
+
+Get it from the request after logging in
+
+![id](/img/drivers/mediatrack/mediatrack-device-fingerprint.jpg)
 
 
 

@@ -25,20 +25,25 @@ star: true
 
 登录后可以在请求头中获取
 
-![token](/img/drivers/mediatrack-token.png)
+![token](/img/drivers/mediatrack/mediatrack-token.png)
 
 ## **项目编号**
 
 从官网网址获取：
 
-![Project id](/img/drivers/mediatrack-projectid.png)
+![Project id](/img/drivers/mediatrack/mediatrack-projectid.png)
 
 ## **根文件夹 ID**
 
 登录后从请求中获取
 
-![id](/img/drivers/mediatrack-rootid.png)
+![id](/img/drivers/mediatrack/mediatrack-rootid.png)
 
+## **设备指纹**
+
+登录后从请求中获取
+
+![id](/img/drivers/mediatrack/mediatrack-device-fingerprint.jpg)
 
 
 ### **默认使用的下载方式**
