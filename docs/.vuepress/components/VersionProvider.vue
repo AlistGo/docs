@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, provide } from "vue"
+import { ref, provide, onMounted } from "vue"
 
 const VERSION_KEY = "alist-version"
 const VERSION_LOADING_KEY = "alist-version-loading"
@@ -12,19 +12,26 @@ const loading = ref(true)
 provide(VERSION_KEY, version)
 provide(VERSION_LOADING_KEY, loading)
 
-// 只在根组件初始化时获取一次版本
-fetch("https://dapi.alistgo.com/v0/version/latest")
-  .then(res => res.json())
-  .then(data => {
+const loadVersion = async () => {
+  try {
+    const res = await fetch("https://dapi.alistgo.com/v0/version/latest")
+    const data = await res.json()
     version.value = data.version
-  })
-  .catch(err => {
-    console.error("fetch version failed", err)
+  } catch (error) {
+    console.warn("Failed to fetch version information")
     version.value = "3.52.0"
-  })
-  .finally(() => {
+  } finally {
     loading.value = false
+  }
+}
+
+if (typeof window !== "undefined") {
+  onMounted(() => {
+    void loadVersion()
   })
+} else {
+  loading.value = false
+}
 </script>
 
 <template>

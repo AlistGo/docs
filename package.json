@@ -6,6 +6,7 @@
   "packageManager": "pnpm@7.9.5",
   "scripts": {
     "ecosystem": "npx tsx scripts/ecosystem.ts",
+    "build": "vuepress build docs",
     "dev-build": "vuepress build docs",
     "docs:build": "vuepress build docs",
     "docs:clean-dev": "vuepress dev docs --clean-cache",
@@ -14,9 +15,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.75",
-    "@vuepress/client": "^2.0.0-rc.19",
-    "@vuepress/plugin-docsearch": "^2.0.0-rc.74",
-    "@vuepress/utils": "^2.0.0-rc.19",
+    "@vuepress/plugin-docsearch": "2.0.0-rc.115",
+    "@vuepress/plugin-watermark": "2.0.0-rc.115",
     "artplayer": "^5.2.2",
     "chart.js": "^4.4.7",
     "dashjs": "^4.7.4",
@@ -27,13 +27,13 @@
     "mermaid": "^11.4.1",
     "mpegts.js": "^1.8.0",
     "naive-ui": "^2.34.4",
-    "sass": "^1.84.0",
+    "sass": "^1.93.2",
     "vue": "^3.5.13",
-    "vuepress": "^2.0.0-rc.19",
-    "vuepress-theme-hope": "^2.0.0-rc.71"
+    "vuepress": "2.0.0-rc.26",
+    "vuepress-theme-hope": "2.0.0-rc.96"
   },
   "dependencies": {
-    "@vuepress/bundler-vite": "^2.0.0-rc.19",
+    "@vuepress/bundler-vite": "2.0.0-rc.26",
     "markdown-it": "^14.1.0",
     "vueuc": "^0.4.47"
   }

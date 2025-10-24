@@ -1,53 +1,67 @@
 <script setup lang="ts">
 import { NButtonGroup, NImage, NSpace, NButton, NDropdown, NTooltip, NPopover } from "naive-ui"
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 // import { api } from "./api";
 
 const proxy = "https://ghfast.top/"
-let version: string | undefined
 
-try {
-  const res = await fetch(`https://dapi.alistgo.com/v0/version/latest`)
-  if (res.ok) {
-    const data = await res.json()
-    version = data.version as string
+const version = ref("latest")
+
+onMounted(async () => {
+  try {
+    const res = await fetch(`https://dapi.alistgo.com/v0/version/latest`)
+    if (res.ok) {
+      const data = await res.json()
+      version.value = data.version as string
+    }
+  } catch (error) {
+    console.warn("Failed to fetch version")
   }
-} catch (error) {
-  console.warn('Failed to fetch version:', error)
-  // 如果获取版本失败，不影响组件正常渲染
-}
+})
 
-const raw = [
+const rawBase = [
   {
     key: "mac_arm64",
     label: "MacOS (Apple Silicon)",
-    url: `https://alistgo.com/download/Alist/desktop-v${version}/alist-desktop_${version}_aarch64.dmg`,
+    buildUrl: (ver: string) =>
+      `https://alistgo.com/download/Alist/desktop-v${ver}/alist-desktop_${ver}_aarch64.dmg`,
   },
   {
     key: "mac_x64",
     label: "MacOS (Intel)",
-    url: `https://alistgo.com/download/Alist/desktop-v${version}/alist-desktop_${version}_x64.dmg`,
+    buildUrl: (ver: string) =>
+      `https://alistgo.com/download/Alist/desktop-v${ver}/alist-desktop_${ver}_x64.dmg`,
   },
   {
     key: "win_x64",
     label: "Windows (X64)",
-    url: `https://alistgo.com/download/Alist/desktop-v${version}/alist-desktop_${version}_x64-setup.exe`,
+    buildUrl: (ver: string) =>
+      `https://alistgo.com/download/Alist/desktop-v${ver}/alist-desktop_${ver}_x64-setup.exe`,
   },
   {
     key: "win_arm64",
     label: "Windows (ARM64)",
-    url: `https://alistgo.com/download/Alist/desktop-v${version}/alist-desktop_${version}_arm64-setup.exe`,
+    buildUrl: (ver: string) =>
+      `https://alistgo.com/download/Alist/desktop-v${ver}/alist-desktop_${ver}_arm64-setup.exe`,
   },
   {
     key: "linux",
     label: "Linux",
-    url: `https://alistgo.com/download/Alist/desktop-v${version}/alist-desktop_${version}_amd64.deb`,
+    buildUrl: (ver: string) =>
+      `https://alistgo.com/download/Alist/desktop-v${ver}/alist-desktop_${ver}_amd64.deb`,
   },
 ] as const
 
-type Plat = (typeof raw)[number]["key"]
+type Plat = (typeof rawBase)[number]["key"]
 
-const platform = navigator.platform.toLowerCase()
+const raw = computed(() =>
+  rawBase.map(({ buildUrl, ...rest }) => ({
+    ...rest,
+    url: buildUrl(version.value),
+  })),
+)
+
+const platform = typeof navigator !== "undefined" ? navigator.platform.toLowerCase() : ""
 const plat = ref<Plat>("win_x64")
 if (platform.includes("win")) {
   plat.value = "win_x64"
@@ -57,8 +71,6 @@ if (platform.includes("win")) {
   plat.value = "mac_arm64"
 }
 
-console.log(plat.value)
-
 let text = {
   down: "Download",
   website: "Website",
@@ -67,11 +79,11 @@ let text = {
 }
 
 const fullPlat = computed(() => {
-  return raw.find((item) => item.key === plat.value)?.label
+  return raw.value.find((item) => item.key === plat.value)?.label
 })
 
 const options = computed(() => {
-  return raw.map((item) => {
+  return raw.value.map((item) => {
     return {
       ...item,
       label: `${item.label} ${plat.value === item.key ? "✅" : ""}`,
@@ -79,7 +91,7 @@ const options = computed(() => {
   })
 })
 
-if (location.pathname.startsWith("/zh/")) {
+if (typeof location !== "undefined" && location.pathname.startsWith("/zh/")) {
   text = {
     down: "下载",
     website: "官网",
@@ -89,7 +101,7 @@ if (location.pathname.startsWith("/zh/")) {
 }
 
 function down() {
-  const href = raw.find((item) => item.key === plat.value)?.url
+  const href = raw.value.find((item) => item.key === plat.value)?.url
   window.open(`${href}`, "_blank")
 }
 
