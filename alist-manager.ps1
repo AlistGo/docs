@@ -1,6 +1,6 @@
 param($Action, $InstallPath)
 
-# -----------------------------
+# ------------------------------
 # 自动检测 PowerShell 版本并设置输出编码
 $psVersion = $PSVersionTable.PSVersion.Major
 
