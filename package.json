@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "Documentation for alist v3",
   "license": "AGPL-3.0",
-  "packageManager": "pnpm@7.9.5",
+  "packageManager": "pnpm@7.33.7",
   "scripts": {
     "ecosystem": "npx tsx scripts/ecosystem.ts",
     "dev-build": "vuepress build docs",
