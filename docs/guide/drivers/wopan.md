@@ -71,7 +71,12 @@ Data obtained by using tools `Refresh_token Fill in the refresh token`, `Access_
 ![](/img/drivers/wopan/add-wopan.png)
 
 
+### **How to capture packets with a browser**
 
+access_token：（Need to get the results urldecode）
+![](/img/drivers/wopan/wopan-Access-Token.png)
+Family ID：
+![](/img/drivers/wopan/wopan-family-id.png)
 
 ### **The default download method used**
 
