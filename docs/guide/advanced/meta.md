@@ -17,6 +17,13 @@ star: true
 ---
 
 # Meta
+
+:::tip
+Supported version:
+
+- Renaming paths covered by a meta password is blocked: `>= v3.58.0`
+:::
+
 The configuration in the meta information is valid for `All Roles`, if you want to have the corresponding permissions for users, please go to `User`-->`User Account` to modify the relative permissions
 
 ### **Path**
@@ -31,6 +38,7 @@ The path for this meta to take effect
 Password required to access this path
 
 - Meta information password will not take effect when accessed using `WebDav`
+- Since `>= v3.58.0`, any path covered by this password cannot be renamed from the UI or via `/api/fs/rename`, `/api/fs/batch_rename`, or `/api/fs/regex_rename`
 
 ::: danger Notes
 

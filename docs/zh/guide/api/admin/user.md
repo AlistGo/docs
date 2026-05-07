@@ -19,6 +19,21 @@ star: true
 
 # user
 
+:::tip
+支持版本：
+
+- 当前用户 `role` 字段使用角色ID数组。
+- 设备会话管理员 API 已单独整理到 [session](./session.md)。
+- 内置 admin 的路径/权限自动修复：`>= v3.58.0`
+:::
+
+> 说明：
+>
+> - `role` 现在是数组，不是单个整数。
+> - 创建用户时如果 `role` 留空，AList 会使用当前默认角色。
+> - 普通的创建/更新接口不能直接给用户分配 `admin` 或 `guest` 角色。
+> - 对于内置 admin 帐号，角色修改会被拒绝；同时 AList 会把异常的 `base_path` / `permission` 自动修复回 `/` 和完整权限。
+
 ## GET 列出所有用户
 
 GET /api/admin/user/list
@@ -44,9 +59,9 @@ GET /api/admin/user/list
         "username": "admin",
         "password": "",
         "base_path": "/",
-        "role": 2,
+        "role": [2],
         "disabled": false,
-        "permission": 0,
+        "permission": 65535,
         "sso_id": ""
       },
       {
@@ -54,7 +69,7 @@ GET /api/admin/user/list
         "username": "guest",
         "password": "",
         "base_path": "/",
-        "role": 1,
+        "role": [1],
         "disabled": true,
         "permission": 0,
         "sso_id": ""
@@ -64,7 +79,7 @@ GET /api/admin/user/list
         "username": "N",
         "password": "",
         "base_path": "/",
-        "role": 0,
+        "role": [3],
         "disabled": false,
         "permission": 256,
         "sso_id": ""
@@ -95,7 +110,7 @@ GET /api/admin/user/list
 | »»» username   | string   | true | none | 用户名   | none |
 | »»» password   | string   | true | none | 密码     | none |
 | »»» base_path  | string   | true | none | 基本路径 | none |
-| »»» role       | integer  | true | none | 角色     | none |
+| »»» role       | [integer] | true | none | 角色ID列表 | none |
 | »»» disabled   | boolean  | true | none | 是否禁用 | none |
 | »»» permission | integer  | true | none | 权限     | none |
 | »»» sso_id     | string   | true | none | sso id   | none |
@@ -125,9 +140,9 @@ GET /api/admin/user/get
     "username": "admin",
     "password": "",
     "base_path": "/",
-    "role": 2,
+    "role": [2],
     "disabled": false,
-    "permission": 0,
+    "permission": 65535,
     "sso_id": ""
   }
 }
@@ -152,7 +167,7 @@ GET /api/admin/user/get
 | »» username   | string  | true | none | 用户名   | none |
 | »» password   | string  | true | none | 密码     | none |
 | »» base_path  | string  | true | none | 基本路径 | none |
-| »» role       | integer | true | none | 角色     | none |
+| »» role       | [integer] | true | none | 角色ID列表 | none |
 | »» disabled   | boolean | true | none | 是否禁用 | none |
 | »» permission | integer | true | none | 权限     | none |
 | »» sso_id     | string  | true | none | sso id   | none |
@@ -169,7 +184,7 @@ POST /api/admin/user/create
   "username": "a",
   "password": "123456",
   "base_path": "/",
-  "role": 0,
+  "role": [3],
   "permission": 60,
   "disabled": false,
   "sso_id": ""
@@ -186,7 +201,7 @@ POST /api/admin/user/create
 | » username    | body   | string  | 是   | 用户名   | none |
 | » password    | body   | string  | 否   | 密码     | none |
 | » base_path   | body   | string  | 否   | 基本路径 | none |
-| » role        | body   | integer | 否   | 角色     | none |
+| » role        | body   | [integer] | 否   | 角色ID列表 | none |
 | » permission  | body   | integer | 否   | 权限     | none |
 | » disabled    | body   | boolean | 否   | 是否禁用 | none |
 | » sso_id      | body   | string  | 否   | sso id   | none |
@@ -231,7 +246,7 @@ POST /api/admin/user/update
   "username": "a",
   "password": "123456",
   "base_path": "/",
-  "role": 0,
+  "role": [3],
   "permission": 60,
   "disabled": false,
   "sso_id": ""
@@ -248,7 +263,7 @@ POST /api/admin/user/update
 | » username    | body   | string  | 是   | 用户名   | none |
 | » password    | body   | string  | 否   | 密码     | none |
 | » base_path   | body   | string  | 否   | 基本路径 | none |
-| » role        | body   | integer | 否   | 角色     | none |
+| » role        | body   | [integer] | 否   | 角色ID列表 | none |
 | » permission  | body   | integer | 否   | 权限     | none |
 | » disabled    | body   | boolean | 否   | 是否禁用 | none |
 | » sso_id      | body   | string  | 否   | sso id   | none |

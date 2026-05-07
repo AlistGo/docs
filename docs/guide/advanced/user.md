@@ -17,6 +17,14 @@ star: true
 ---
 
 # User
+
+:::tip
+Supported version:
+
+- Role-scoped path aggregation and `Check path limit`: `>= v3.53.0`
+- Device sessions, `My Sessions`, and global device-limit controls: `>= v3.52.0`
+:::
+
 ## **Username**
 Username for login
 ## **Password**
@@ -45,6 +53,15 @@ A: You can create a new [alias](alias.md) storage, add all the paths you need to
 
 <br/>
 
+## **Roles and paths**
+
+- AList now recommends managing user access through roles.
+- A role can contain multiple permission scopes. Each scope is a path plus its permission bits.
+- The user's effective permissions are the union of all assigned role scopes.
+- `Base path` only controls the default landing path after login. It does not replace role permission scopes.
+
+<br/>
+
 
 
 ## **Permission**
@@ -64,6 +81,7 @@ A: You can create a new [alias](alias.md) storage, add all the paths you need to
   - After turning on this option, compressed package format files will be previewed by default (as shown in the figure below), which will consume some server traffic, but will not download them all.
   - If you want to turn off the preferred preview of the compressed format, ==**Manage => Setting => Preview by default when opening archives**==, this option is turned off, and the preference is the download mode
 - Decompress: Decompress compressed package files online
+- Check path limit: Restrict access to paths covered by the user's role permission scopes
 
 ![](/img/advanced/user_read_archives_light.png#light)
 
@@ -76,6 +94,21 @@ A: You can create a new [alias](alias.md) storage, add all the paths you need to
 ## **Disabled**
 
 After checking, this user will stop using it and cannot log in. The guest account is disabled by default. If you want to enable the guest account, please close it manually.
+
+<br/>
+
+## **Device sessions**
+
+- AList identifies a device by the `Client-Id` header, or by the `client_id` query parameter in API requests. The web UI generates and stores a stable client id automatically.
+- `max_devices` is a global setting. `0` means unlimited devices.
+- When `max_devices` is greater than `0`, `device_evict_policy` controls the overflow behavior:
+  - `deny`: block the new login
+  - `evict_oldest`: invalidate the oldest active device session first
+- `device_session_ttl` is also a global setting. It is measured in seconds and is used to clean stale device-session records automatically.
+- Configure these global controls in `Manage => Settings => Global`.
+- Users can review and evict their own devices in `Manage => Session => My Session`.
+- Admins can view all device sessions in `Manage => Session => Management`.
+- Logging out marks the current device session inactive. After that, requests from the same device session must log in again.
 
 <br/>
 

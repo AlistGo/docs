@@ -19,6 +19,21 @@ star: true
 
 # user
 
+:::tip
+Supported version:
+
+- Current user role field uses an array of role IDs.
+- Device-session admin APIs are documented in [session](./session.md).
+- Built-in admin path / permission self-heal: `>= v3.58.0`
+:::
+
+> Notes:
+>
+> - `role` is an array, not a single integer.
+> - If `role` is empty during create, AList uses the current default role.
+> - `admin` and `guest` roles cannot be assigned through normal create / update.
+> - For the built-in admin account, role changes are blocked, and AList heals dirty `base_path` / `permission` back to `/` and full access.
+
 ## GET 列出所有用户
 
 GET /api/admin/user/list
@@ -44,9 +59,9 @@ GET /api/admin/user/list
         "username": "admin",
         "password": "",
         "base_path": "/",
-        "role": 2,
+        "role": [2],
         "disabled": false,
-        "permission": 0,
+        "permission": 65535,
         "sso_id": ""
       },
       {
@@ -54,7 +69,7 @@ GET /api/admin/user/list
         "username": "guest",
         "password": "",
         "base_path": "/",
-        "role": 1,
+        "role": [1],
         "disabled": true,
         "permission": 0,
         "sso_id": ""
@@ -64,7 +79,7 @@ GET /api/admin/user/list
         "username": "N",
         "password": "",
         "base_path": "/",
-        "role": 0,
+        "role": [3],
         "disabled": false,
         "permission": 256,
         "sso_id": ""
@@ -95,7 +110,7 @@ GET /api/admin/user/list
 | »»» username   | string   | true | none | 用户名   | none |
 | »»» password   | string   | true | none | 密码     | none |
 | »»» base_path  | string   | true | none | 基本路径 | none |
-| »»» role       | integer  | true | none | 角色     | none |
+| »»» role       | [integer] | true | none | 角色ID列表 | none |
 | »»» disabled   | boolean  | true | none | 是否禁用 | none |
 | »»» permission | integer  | true | none | 权限     | none |
 | »»» sso_id     | string   | true | none | sso id   | none |
@@ -125,9 +140,9 @@ GET /api/admin/user/get
     "username": "admin",
     "password": "",
     "base_path": "/",
-    "role": 2,
+    "role": [2],
     "disabled": false,
-    "permission": 0,
+    "permission": 65535,
     "sso_id": ""
   }
 }
@@ -152,7 +167,7 @@ GET /api/admin/user/get
 | »» username   | string  | true | none | 用户名   | none |
 | »» password   | string  | true | none | 密码     | none |
 | »» base_path  | string  | true | none | 基本路径 | none |
-| »» role       | integer | true | none | 角色     | none |
+| »» role       | [integer] | true | none | 角色ID列表 | none |
 | »» disabled   | boolean | true | none | 是否禁用 | none |
 | »» permission | integer | true | none | 权限     | none |
 | »» sso_id     | string  | true | none | sso id   | none |
@@ -169,7 +184,7 @@ POST /api/admin/user/create
   "username": "a",
   "password": "123456",
   "base_path": "/",
-  "role": 0,
+  "role": [3],
   "permission": 60,
   "disabled": false,
   "sso_id": ""
@@ -186,7 +201,7 @@ POST /api/admin/user/create
 | » username    | body   | string  | 是   | 用户名   | none |
 | » password    | body   | string  | 否   | 密码     | none |
 | » base_path   | body   | string  | 否   | 基本路径 | none |
-| » role        | body   | integer | 否   | 角色     | none |
+| » role        | body   | [integer] | 否   | 角色ID列表 | none |
 | » permission  | body   | integer | 否   | 权限     | none |
 | » disabled    | body   | boolean | 否   | 是否禁用 | none |
 | » sso_id      | body   | string  | 否   | sso id   | none |
@@ -231,7 +246,7 @@ POST /api/admin/user/update
   "username": "a",
   "password": "123456",
   "base_path": "/",
-  "role": 0,
+  "role": [3],
   "permission": 60,
   "disabled": false,
   "sso_id": ""
@@ -248,7 +263,7 @@ POST /api/admin/user/update
 | » username    | body   | string  | 是   | 用户名   | none |
 | » password    | body   | string  | 否   | 密码     | none |
 | » base_path   | body   | string  | 否   | 基本路径 | none |
-| » role        | body   | integer | 否   | 角色     | none |
+| » role        | body   | [integer] | 否   | 角色ID列表 | none |
 | » permission  | body   | integer | 否   | 权限     | none |
 | » disabled    | body   | boolean | 否   | 是否禁用 | none |
 | » sso_id      | body   | string  | 否   | sso id   | none |

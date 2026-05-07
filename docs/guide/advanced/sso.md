@@ -294,11 +294,16 @@ https://your.alist.domain/api/auth/sso_callback\?method=get_sso_id
 
 ## **SSO automatically registers as an AList account**
 
-- ==AList Version > **v3.22.1** New Features==
+:::tip
+Supported version:
+
+- SSO auto register: `>= v3.22.1`
+- Auto-registered users inherit the current default role: `>= v3.53.0`
+:::
 
 Before using single sign-on to register as an AList account, we need to bind the single sign-on of AList first, the binding method is explained above
 
-- Supports the `five` single sign-on methods mentioned above
+- Supports the SSO methods configured above
 
 - Do not use the default organization (**app-built-in**) directly, because all users in this organization are global administrator accounts
 - Except `CASDOOR`, you only need to fill in the` Client id` and the `Client secrets`and the newly added single login account registered as Alist account configuration
@@ -319,7 +324,13 @@ Please refer to the detailed description below for how to fill in, the schematic
 
 ### **<i class="fa-solid fa-circle-1" style="color: #409eff;"></i>SSO auto register**
 
-If we want SSO single sign-on to be registered as an AList account, we need to enable this option before it can be used
+If we want SSO single sign-on to be registered as an AList account, we need to enable this option before it can be used.
+
+Newly auto-registered users inherit:
+
+- the current `default role`
+- `SSO default dir`
+- `SSO default permission`
 
 <br/>
 
@@ -455,4 +466,3 @@ http(s)://You_Url/api/auth/sso_get_token
 ```
 
 If you enable the **Sso compatibility mode** if you do not modify it, you will prompt `Invalid Redirect URL` Error
-

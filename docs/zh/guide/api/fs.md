@@ -18,6 +18,13 @@ star: true
 
 # fs
 
+:::tip
+支持版本：
+
+- `/api/fs/list` 返回字段 `filtered_total`、`page`、`per_page`、`has_more`、`pages_total`：`>= v3.58.0`
+- 密码保护路径的重命名、批量重命名、正则重命名会被后端拦截：`>= v3.58.0`
+:::
+
 ## POST 新建文件夹
 
 POST /api/fs/mkdir
@@ -89,6 +96,8 @@ POST /api/fs/rename
 | body          | body   | object | 否   |                       | none  |
 | » name        | body   | string | 是   | 目标文件名，不支持'/' | none  |
 | » path        | body   | string | 是   | 源文件名              | none  |
+
+> 从 `>= v3.58.0` 开始，如果源路径被某条带密码的元信息覆盖，AList 会直接返回 `403`，即使调用方已经知道该密码也不能重命名。
 
 ### 返回示例
 
@@ -196,7 +205,7 @@ POST /api/fs/list
   "path": "/t",
   "password": "",
   "page": 1,
-  "per_page": 0,
+  "per_page": 200,
   "refresh": false
 }
 ```
@@ -212,6 +221,12 @@ POST /api/fs/list
 | » page        | body   | integer | 否   | 页数         | none |
 | » per_page    | body   | integer | 否   | 每页数目     | none |
 | » refresh     | body   | boolean | 否   | 是否强制刷新 | none |
+
+> 后端归一化规则：
+>
+> - `page <= 0` 会被归一化为 `1`
+> - `per_page <= 0` 会使用后端默认值 `200`
+> - `per_page > 500` 会被截断为 `500`
 
 ### 返回示例
 
@@ -237,6 +252,11 @@ POST /api/fs/list
       }
     ],
     "total": 1,
+    "filtered_total": 1,
+    "page": 1,
+    "per_page": 200,
+    "has_more": false,
+    "pages_total": 1,
     "readme": "",
     "header": "",
     "write": true,
@@ -272,6 +292,11 @@ POST /api/fs/list
 | »»» hashinfo  | string   | false | none |              | none |
 | »»» hash_info | null     | false | none |              | none |
 | »» total      | integer  | true  | none | 总数         | none |
+| »» filtered_total | integer | true | none | 过滤后的总数 | 当前用户实际可见对象总数 |
+| »» page       | integer  | true  | none | 当前页       | 归一化后的页码 |
+| »» per_page   | integer  | true  | none | 每页数量     | 实际生效的每页大小 |
+| »» has_more   | boolean  | true  | none | 是否还有更多 | 是否还有下一页 |
+| »» pages_total | integer | true  | none | 总页数       | 基于 `filtered_total` 和 `per_page` 计算 |
 | »» readme     | string   | true  | none | 说明         | none |
 | »» write      | boolean  | true  | none | 是否可写入   | none |
 | »» provider   | string   | true  | none |              | none |
@@ -529,6 +554,8 @@ POST /api/fs/batch_rename
 | »» src_name      | body   | string   | 否   | 原文件名 | none  |
 | »» new_name      | body   | string   | 否   | 新文件名 | none  |
 
+> 从 `>= v3.58.0` 开始，如果批量重命名里命中的任一源路径被带密码的元信息覆盖，接口会返回 `403`。
+
 ### 返回示例
 
 > 成功
@@ -585,6 +612,8 @@ POST /api/fs/regex_rename
 | » src_dir        | body   | string | 是   | 源目录         | none  |
 | » src_name_regex | body   | string | 是   | 源文件匹配正则 | none  |
 | » new_name_regex | body   | string | 是   | 新文件名正则   | none  |
+
+> 从 `>= v3.58.0` 开始，正则重命名命中的源路径如果被带密码的元信息覆盖，也会返回 `403`。
 
 ### 返回示例
 

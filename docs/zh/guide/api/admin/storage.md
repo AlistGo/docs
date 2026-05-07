@@ -19,6 +19,13 @@ star: true
 
 # storage
 
+:::tip
+支持版本：
+
+- 存储字段 `down_proxy_sign`：`>= v3.56.0`
+- 删除仍被角色 / 用户基本路径引用的存储时会被后端拦截：`>= v3.52.0`
+:::
+
 ## GET 列出存储列表
 
 GET /api/admin/storage/list
@@ -58,7 +65,8 @@ GET /api/admin/storage/list
         "extract_folder": "front",
         "web_proxy": false,
         "webdav_policy": "native_proxy",
-        "down_proxy_url": ""
+        "down_proxy_url": "",
+        "down_proxy_sign": true
       }
     ],
     "total": 1
@@ -99,6 +107,7 @@ GET /api/admin/storage/list
 | »»» web_proxy        | boolean  | false | none | web代理      | http代理     |
 | »»» webdav_policy    | string   | false | none | webdav代理   | webdav策略   |
 | »»» down_proxy_url   | string   | false | none | 下载代理url  | 下载代理url  |
+| »»» down_proxy_sign  | boolean  | false | none | 代理签名开关 | 是否给下载代理 URL 附加 `sign` |
 | »» total             | integer  | true  | none | 总数         | none         |
 
 ## POST 启用存储
@@ -194,6 +203,7 @@ POST /api/admin/storage/create
   "web_proxy": false,
   "webdav_policy": "native_proxy",
   "down_proxy_url": "",
+  "down_proxy_sign": true,
   "extract_folder": "front",
   "enable_sign": false,
   "driver": "Local",
@@ -219,6 +229,7 @@ POST /api/admin/storage/create
 | » web_proxy        | body   | boolean | 是   | web代理      | none  |
 | » webdav_policy    | body   | string  | 否   | webdav策略   | none  |
 | » down_proxy_url   | body   | string  | 否   | 下载代理     | none  |
+| » down_proxy_sign  | body   | boolean | 否   | 代理签名开关 | 是否附加 `sign` 参数 |
 | » order_by         | body   | string  | 是   | 排序方式     | none  |
 | » extract_folder   | body   | string  | 是   | 提取目录     | none  |
 | » order_direction  | body   | string  | 是   | 排序方向     | none  |
@@ -271,6 +282,7 @@ POST /api/admin/storage/update
   "web_proxy": false,
   "webdav_policy": "native_proxy",
   "down_proxy_url": "",
+  "down_proxy_sign": true,
   "extract_folder": "front",
   "enable_sign": false,
   "driver": "Local",
@@ -296,6 +308,7 @@ POST /api/admin/storage/update
 | » web_proxy        | body   | boolean | 是   | web代理      | none  |
 | » webdav_policy    | body   | string  | 否   | webdav策略   | none  |
 | » down_proxy_url   | body   | string  | 否   | 下载代理     | none  |
+| » down_proxy_sign  | body   | boolean | 否   | 代理签名开关 | 是否附加 `sign` 参数 |
 | » order_by         | body   | string  | 是   | 排序方式     | none  |
 | » extract_folder   | body   | string  | 是   | 提取目录     | none  |
 | » order_direction  | body   | string  | 是   | 排序方向     | none  |
@@ -368,7 +381,8 @@ GET /api/admin/storage/get
     "extract_folder": "front",
     "web_proxy": false,
     "webdav_policy": "302_redirect",
-    "down_proxy_url": ""
+    "down_proxy_url": "",
+    "down_proxy_sign": true
   }
 }
 ```
@@ -404,6 +418,7 @@ GET /api/admin/storage/get
 | »» web_proxy        | boolean | true | none | web代理      | none |
 | »» webdav_policy    | string  | true | none | webdav策略   | none |
 | »» down_proxy_url   | string  | true | none | 下载代理     | none |
+| »» down_proxy_sign  | boolean | true | none | 代理签名开关 | 是否给下载代理 URL 附加 `sign` |
 
 ## POST 删除指定存储
 
@@ -415,6 +430,8 @@ POST /api/admin/storage/delete
 | ------------- | ------ | ------ | ---- | ------ | ------ |
 | id            | query  | string | 否   |        | 存储id |
 | Authorization | header | string | 是   |        | token  |
+
+> 从 `>= v3.52.0` 开始，如果某个存储的首段挂载路径仍被角色权限作用域或用户 `base_path` 引用，删除会被后端拦截，并返回类似 `storage is used by role:xxx, user:yyy, please cancel usage first` 的错误。
 
 ### 返回示例
 

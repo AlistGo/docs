@@ -18,6 +18,12 @@ star: true
 
 # Global settings
 
+:::tip
+Supported version:
+
+- Device-session limit, eviction policy, and TTL settings: `>= v3.52.0`
+:::
+
 ### **Hide files**
 
 Match files hidden by regular expressions(`javascript`). If you don't understand, don't fill in them randomly. Wrong regular expressions `/\/README.md/i` will cause the front-end page to crash. One per line. By default, there is an example expression that hides README.md in all directories.
@@ -141,3 +147,29 @@ In the background `Settings`-->`Global`-->Open `Webauthn login enabled`, go back
   - On the login page, click the login button on the far right, enter our user name, click login, and then unlock the required `Webauthn` verification method to log in
 - Adding `Webauthn` requires a secure origin and can only be used on `https` or `localhost`
   - Unsafe sources, such as: http, 192.168.x.x, 127.0.0.1, or directly use the server IP, etc. These places cannot be used
+
+<br/>
+
+## **Max devices**
+
+Global limit for active device sessions.
+
+- `0` means unlimited
+- It is enforced when users log in with device sessions
+
+<br/>
+
+## **Device evict policy**
+
+What to do when a new login would exceed `Max devices`.
+
+- `deny`: reject the new login
+- `evict_oldest`: invalidate the oldest active device session first
+
+<br/>
+
+## **Device session ttl**
+
+How long to keep stale device-session records, in seconds.
+
+- It is used for automatic cleanup of inactive / expired device-session records
