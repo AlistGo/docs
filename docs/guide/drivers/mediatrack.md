@@ -21,6 +21,12 @@ star: true
 
 **https://app.mediatrack.cn**
 
+:::tip
+Supported version:
+
+- `Device fingerprint` / `X-Device-Fingerprint` support: `>= v3.55.0`
+:::
+
 ### **Access token**
 
 You can get it in request header after logging in
@@ -43,6 +49,10 @@ Get it from the request after logging in
 Get it from the request after logging in
 
 ![id](/img/drivers/mediatrack/mediatrack-device-fingerprint.jpg)
+
+- AList sends this value as the `X-Device-Fingerprint` request header.
+- It is recommended to capture `Access token` and `Device fingerprint` from the same logged-in browser session.
+- If this value is empty or stale, listing or download requests may fail even when the token itself still looks valid.
 
 
 

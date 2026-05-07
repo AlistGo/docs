@@ -21,6 +21,12 @@ star: true
 # Baidu Netdisk
 
 :::tip
+Supported version:
+
+- `Use dynamic upload api` and improved upload fallback / retry: `>= v3.56.0`
+:::
+
+:::tip
 Due to the limitation of Baidu Disk API, downloading files larger than about 20M needs to carry the header: "User-Agent": "pan.baidu.com", so when downloading files larger than 20M, you need to set the request header yourself, such as using curl:
 ```bash
 curl -L -X GET 'YOUR_LINK' -H 'User-Agent: pan.baidu.com'
@@ -163,8 +169,11 @@ Official Documentation: [百度网盘开放平台 - 上传 - 能力说明](https
 
 > Baidu Netdisk requires that each slice be uploaded within 30 seconds, so excessively high concurrency during file uploads may result in a significant number of failures.
 
-- Upload Threads: The number of slices to upload concurrently.
-- Upload API: The domain endpoint used for uploading.
+- `Use dynamic upload api` is enabled by default. AList will try to discover Baidu's current upload domain automatically and cache the result for about 1 hour.
+- `Upload API` is now the fallback endpoint when dynamic discovery fails. If it is blank or unavailable, AList falls back again to `https://d.pcs.baidu.com`.
+- `Upload Threads`: the number of slices to upload concurrently. Valid range: `1` to `32`.
+- Baidu Netdisk does not allow uploading empty files.
+- AList will retry transient upload failures. If Baidu expires the current `uploadid`, AList recreates the upload session and retries the file from the beginning.
 - Custom Upload Slice Size: Allows you to specify the size of each slice. Note that there are limitations, and this feature is available to VIPs only.
 - Low Bandwidth Upload Mode: Attempts to address the frequent `Client.Timeout exceeded while awaiting headers` errors encountered in low upload bandwidth scenarios (e.g., residential broadband). When enabled, it uses the smallest possible slice size.
 

@@ -19,7 +19,21 @@ star: true
 
 # FeiJi Cloud
 
-FeiJi Cloud：https://www.feijipan.com/ ( v3.31.0)
+:::tip
+Supported version:
+
+- FeiJiPan driver: `>= v3.31.0`
+:::
+
+:::danger
+This driver is not recommended for normal use.
+
+- Account restriction, suspension, or freeze risk exists.
+- Public sharing, large traffic, automation, or abusive usage is especially risky.
+- If you still use it, keep usage conservative and be prepared for the provider to limit the account at any time.
+:::
+
+FeiJi Cloud：https://www.feijipan.com/
 
 ## **Root folder ID**
 

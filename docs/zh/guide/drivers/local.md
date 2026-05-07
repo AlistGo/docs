@@ -18,6 +18,13 @@ star: true
 ---
 # 本机存储
 
+:::tip
+支持版本：
+
+- 本地视频缩略图：`>= v3.12.0`
+- 全局 `Thumbnail size` 设置：`>= v3.58.0`
+:::
+
 ## **根文件夹ID**
 
 您要挂载的文件夹的路径。 例如：
@@ -32,6 +39,7 @@ star: true
 需要使用`ffmpeg` 工具来添加，暂时还不会（后续补充）
 
 - 需要使用AList版本 ≥ [**v3.12.0**](https://github.com/alist-org/alist/releases/tag/v3.12.0)
+- 生成出来的缩略图宽度会跟随后台 `设置 -> 预览 -> Thumbnail size`，当前默认值是 `144` 像素，高度按比例缩放。
   - Add thumbnail for video with ffmpeg  -  by [**@GodFinal**](https://github.com/GodFinal) and [**@Xhofe**](https://github.com/Xhofe) in [**#3556**](https://github.com/alist-org/alist/pull/3556) [**(309d6)**](https://github.com/alist-org/alist/commit/309d655)
   - Support both time and percent for video thumbnail  - by [**@1024th**](https://github.com/1024th) in [**#7802**](https://github.com/AlistGo/alist/pull/7802) [(**31a74**)](https://github.com/AlistGo/alist/commit/31a74708)
 

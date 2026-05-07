@@ -10,7 +10,7 @@ category:
 tag:
   - Storage
   - Guide
-  - "Native Rroxy"
+  - "Native Proxy"
   - "302"
 # this page is sticky in article list
 sticky: true
@@ -22,8 +22,16 @@ star: true
 
 **https://pan.quark.cn**
 
-:::danger
-Due to the speed limit of Quark Cloud,Quick Cloud must use local agents for transmission now,[For details, see](https://github.com/alist-org/alist/issues/4318#issuecomment-1536214188)
+:::tip
+Supported version:
+
+- `Use transcoding address` and Quark video `302` preview/download: `>= v3.58.0`
+:::
+
+:::warning
+Quark original download links are still sensitive to headers, account limits, and server bandwidth, so `local proxy` / `native proxy` remains the most compatible choice for the regular download path.
+
+If you enable `Use transcoding address`, AList can return Quark's transcoded video address for video files and support `302` redirection. When the transcoding address is unavailable, AList falls back to the regular download link.
 :::
 
 ## **Quark Cloud**
@@ -50,6 +58,15 @@ Note that only Cookies captured in Chrome is available, use Firefox's Cookies ma
 
 <br/>
 
+### **Use transcoding address**
+
+`Use transcoding address` is only used for `Quark` video files.
+
+- Disabled: use the original download link. This keeps the original file quality and still works for non-video files, but proxy / native proxy is usually the safer default.
+- Enabled: use Quark's transcoded video address, which is better for web playback and supports `302`, but it uses the transcoded stream instead of the original file quality.
+
+<br/>
+
 
 
 ### **The default download method used**
@@ -61,13 +78,19 @@ title: Which download method is used by default?
 ---
 flowchart TB
     style c1 fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff
+    style a1 fill:#d9f99d,stroke:#333,stroke-width:2px,color:#111
     style a2 fill:#ff7575,stroke:#333,stroke-width:4px
     subgraph ide1 [ ]
     c1
+    a1
     end
-    c1[local proxy]:::someclass==mandatory===>a2[user equipment]
+    c1[local proxy / native proxy]:::someclass====|default / most compatible|a2[user equipment]
+    a1[302 via transcoding address]-.video files + option enabled.->a2[user equipment]
+    b1[Download proxy URL]-.alternative.->a2[user equipment]
     classDef someclass fill:#f96
+    click a1 "../drivers/common.html#webdav-policy"
     click b1 "../drivers/common.html#webdav-policy"
+    click c1 "../drivers/common.html#webdav-policy"
 ```
 
 illustrate：[**alist/issues/4318**](https://github.com/alist-org/alist/issues/4318#issuecomment-1536214188)

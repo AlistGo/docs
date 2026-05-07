@@ -21,6 +21,12 @@ star: true
 
 **https://app.mediatrack.cn**
 
+:::tip
+支持版本：
+
+- `设备指纹` / `X-Device-Fingerprint` 支持：`>= v3.55.0`
+:::
+
 ## **访问令牌**
 
 登录后可以在请求头中获取
@@ -44,6 +50,10 @@ star: true
 登录后从请求中获取
 
 ![id](/img/drivers/mediatrack/mediatrack-device-fingerprint.jpg)
+
+- AList 会把这个值作为 `X-Device-Fingerprint` 请求头发给分秒帧。
+- 建议从同一个已登录浏览器会话里，一起抓取 `访问令牌` 和 `设备指纹`。
+- 如果这个值为空、过期或与当前会话不匹配，即使 `Access token` 还在，请求也可能无法列目录或获取下载链接。
 
 
 ### **默认使用的下载方式**

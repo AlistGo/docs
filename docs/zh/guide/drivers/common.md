@@ -187,6 +187,15 @@ Workers 代码可以在 https://github.com/alist-org/alist-proxy/blob/main/alist
 
 ::::
 
+### **下载代理签名** <Badge text=">= v3.56.0" type="info" vertical="middle" />
+
+控制 AList 在拼接下载代理跳转地址时，是否自动附加 `?sign=...`。
+
+- 默认开启：代理请求形如 `PROXY_URL/path?sign=...`
+- 关闭后：代理请求形如 `PROXY_URL/path`
+- 如果你的自定义代理程序依赖 `sign` 做校验，请保持开启
+- 如果代理本身位于可信环境且不做签名校验，可以关闭；但这时要自行保护好代理入口
+
 你甚至可以开发自己的代理程序，一般步骤是：
 
 - 下载时会请求 `PROXY_URL/path?sign=sign_value`

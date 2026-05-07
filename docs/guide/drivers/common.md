@@ -193,6 +193,15 @@ If you don’t understand, there are detailed [**video tutorial**](https://www.b
 
 ::::
 
+### **Down proxy sign** <Badge text=">= v3.56.0" type="info" vertical="middle" />
+
+Controls whether AList appends `?sign=...` when it builds a redirected download-proxy URL.
+
+- Enabled by default: proxy requests look like `PROXY_URL/path?sign=...`
+- Disabled: proxy requests look like `PROXY_URL/path`
+- If your custom proxy validates `sign`, keep this enabled
+- If your proxy is trusted and does not verify signatures, you can disable it, but then the proxy endpoint itself must be protected appropriately
+
 You can even develop your own proxy program, the general steps are:
 
 - When downloading, it will request `PROXY_URL/path?sign=sign_value`

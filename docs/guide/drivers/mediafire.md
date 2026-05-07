@@ -20,6 +20,12 @@ star: true
 
 # MediaFire
 
+:::tip
+Supported version:
+
+- MediaFire driver and automatic session renewal: `>= v3.53.0`
+:::
+
 <br/>
 
 ![logo](/img/drivers/mediafire/mediafire_mf_logo_u1_full_color_reversed.svg)
@@ -28,7 +34,6 @@ Site：**https://mediafire.com**
 <br/>
 
 - MediaFire does not provide `API_KEY` nor `APP` support anymore, so setting user session values is a must.
-- :warning: Alist version > ==3.53.0== to get this driver.
 
 ## **Configure storage**
 
@@ -75,9 +80,9 @@ Default is "/", because this driver roots to "myfiles", and then manages directo
 
 1. List, Link, MakeDir, Move, Rename, Copy, Remove, Put, PutResult
 
-2. Session auto-refreshing
+2. Session token auto-renewal while the storage stays active
 
-3. Upload is resumable and supports recovery, due to splitted in chunks transmission. Very useful for big files.
+3. Upload is chunked, resumable, and supports recovery. Very useful for big files.
 
 <br/>
 
@@ -85,9 +90,11 @@ Default is "/", because this driver roots to "myfiles", and then manages directo
 
 1. `root folder ID`,`root folder Path` will be set automatically
 
-2. MediaFire closes the current session after 10 mins, an auto renewal of session (as stated before) is already implemented, however if you shut down AList or your PC, session will expire and reconfiguring session and cookie is mandatory, in order to keep the storage working!
+2. MediaFire sessions are short-lived. AList renews the session token in the background every few minutes while the storage stays online, so long-running instances usually keep working without manual refresh.
 
-3. If you have AList running in a server or smartphone, you will likely do not have problems about the uggly session expiry, unless AList server get off.
+3. If AList is restarted, sleeps for a long time, or MediaFire revokes the login, you may still need to capture a fresh `Session Token` and `Cookie`.
+
+4. `Chunk size` controls the per-chunk upload size used by the MediaFire uploader. Larger values reduce the number of requests, but unstable networks may benefit from smaller chunks.
 
 <br/>
 
