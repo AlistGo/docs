@@ -76,6 +76,17 @@ A file list program that supports multiple storage, and supports web browsing an
 - [x] [LenovoNasShare](https://pc.lenovo.com.cn)
 - [x] [GitHub API](../guide/drivers/github.md) / [GitHub Release](../guide/drivers/github_releases.md)
 - [x] [Misskey](https://misskey-hub.net/cn/docs/for-users/features/drive/)
+- [x] [Chunker](../guide/drivers/Chunker.md)
+- [x] [FTPS](../guide/drivers/ftps.md)
+- [x] [Gofile](../guide/drivers/gofile.md)
+- [x] [Streamtape](../guide/drivers/streamtape.md)
+- [x] [STRM](../guide/drivers/strm.md)
+- [x] [WuKongNetdisk](../guide/drivers/wukongnetdisk.md)
+- [x] [Doubao New](../guide/drivers/doubao_new.md)
+- [x] [Gitee](../guide/drivers/gitee.md)
+- [x] [BitQiu](../guide/drivers/bitqiu.md)
+- [x] [ProtonDrive](../guide/drivers/protondrive.md)
+- [x] [pCloud](../guide/drivers/pcloud.md)
 
 ### Discussion
 

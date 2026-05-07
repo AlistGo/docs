@@ -38,6 +38,7 @@ category:
 - [x] [又拍云对象存储](https://www.upyun.com/products/file-storage)
 - [x] WebDAV(支持无API的OneDrive/SharePoint)
 - [x] Teambition（[中国](https://www.teambition.com/ )，[国际](https://us.teambition.com/ )）
+- [x] [MediaFire](../guide/drivers/mediafire.md)
 - [x] [分秒帧](https://www.mediatrack.cn/)
 - [x] [天翼云盘](https://cloud.189.cn) (个人云, 家庭云)
 - [x] [中国移动云盘](https://yun.139.com/) (个人云, 家庭云)
@@ -73,6 +74,17 @@ category:
 - [x] [联想家庭储存链接分享](https://pc.lenovo.com.cn)
 - [x] [GitHub API](../guide/drivers/github.md) / [GitHub Release](../guide/drivers/github_releases.md)
 - [x] [Misskey](https://misskey-hub.net/cn/docs/for-users/features/drive/)
+- [x] [Chunker（分片）](../guide/drivers/Chunker.md)
+- [x] [FTPS](../guide/drivers/ftps.md)
+- [x] [Gofile](../guide/drivers/gofile.md)
+- [x] [Streamtape](../guide/drivers/streamtape.md)
+- [x] [STRM](../guide/drivers/strm.md)
+- [x] [悟空网盘](../guide/drivers/wukongnetdisk.md)
+- [x] [豆包新版](../guide/drivers/doubao_new.md)
+- [x] [Gitee](../guide/drivers/gitee.md)
+- [x] [BitQiu](../guide/drivers/bitqiu.md)
+- [x] [Proton Drive](../guide/drivers/protondrive.md)
+- [x] [pCloud](../guide/drivers/pcloud.md)
 
 ## Discussion
 
