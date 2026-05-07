@@ -18,6 +18,12 @@ star: true
 
 # Site settings
 
+:::tip
+Supported version:
+
+- Current paginated list settings and default page size `50`: `>= v3.58.0`
+:::
+
 ### **Version**
 
 The version of the `alist`, readonly.
@@ -72,7 +78,7 @@ If you think the `x` button in the upper right corner is in the way, you can use
 
 ### **Pagination type**
 
-- All: All files will be displayed at once.
+- All: Legacy raw setting value. Use it carefully for very large directories.
 - Pagination: Show a `Paginator` at the bottom of the page.
 - Load more: Show a `Load more` button at the bottom of the page.
 - Auto load more: Automatically load more files when scrolling to the bottom of the page.
@@ -81,7 +87,11 @@ If you think the `x` button in the upper right corner is in the way, you can use
 
 ### **Default page size**
 
-The default page size of the `alist` if `Pagination type` doesn't set to `All`, such as `20`.
+The default page size of the `alist` for paginated directory listing.
+
+- Current site default: `50`
+- `/api/fs/list` still has its own backend default `200` when `per_page <= 0`
+- Backend maximum `per_page`: `500`
 
 
 

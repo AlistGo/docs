@@ -18,6 +18,13 @@ star: true
 ---
 # setting
 
+:::tip
+Supported version:
+
+- `POST /api/admin/setting/set_token`: `>= v3.56.0`
+- `default_page_size` default `50` and preview setting `thumbnail_size`: `>= v3.58.0`
+:::
+
 ## GET 列出设置
 
 GET /api/admin/setting/list
@@ -223,7 +230,7 @@ POST /api/admin/setting/save
   },
   {
     "key": "default_page_size",
-    "value": "30",
+    "value": "50",
     "help": "",
     "type": "number",
     "options": "",
@@ -361,6 +368,54 @@ POST /api/admin/setting/reset_token
 | » code    | integer | true | none | 状态码 | none |
 | » message | string  | true | none | 信息   | none |
 | » data    | string  | true | none | 新令牌 | none |
+
+## POST 设置令牌
+
+POST /api/admin/setting/set_token
+
+> Body 请求参数
+
+```json
+{
+  "token": "alist-fixed-token"
+}
+```
+
+### 请求参数
+
+| 名称          | 位置   | 类型   | 必选 | 中文名 | 说明 |
+| ------------- | ------ | ------ | ---- | ------ | ---- |
+| Authorization | header | string | 是   |        | none |
+| body          | body   | object | 否   |        | none |
+| » token       | body   | string | 是   | 新令牌 | 立即替换当前永久令牌 |
+
+### 返回示例
+
+> 成功
+
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": "alist-fixed-token"
+}
+```
+
+### 返回结果
+
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
+
+### 返回数据结构
+
+状态码 **200**
+
+| 名称      | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| --------- | ------- | ---- | ---- | ------ | ---- |
+| » code    | integer | true | none | 状态码 | none |
+| » message | string  | true | none | 信息   | none |
+| » data    | string  | true | none | 当前令牌 | 保存后的令牌值 |
 
 ## POST 设置aria2
 

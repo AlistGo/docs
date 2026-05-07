@@ -18,6 +18,12 @@ star: true
 
 # Other settings
 
+:::tip
+Supported version:
+
+- Manually setting the admin token in UI/API: `>= v3.56.0`
+:::
+
 ### **Aria2**
 
 Set Aria2 uri and Aria2 for offline download. Aria2 needs to be installed on the same server(container if use docker) as alist.
@@ -53,6 +59,9 @@ Allow the use of offline download tools such as 115/PikPak/Thunder in any storag
 ### **Token**
 
 The token that can be used to access all API.
+
+- In `Manage -> Settings -> Other`, you can copy it, set a fixed value manually, or reset it to a random value.
+- After changing it, remember to update scripts, proxy programs, or automation that still use the old token.
 
 <br/>
 
