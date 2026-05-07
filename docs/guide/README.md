@@ -50,6 +50,7 @@ A file list program that supports multiple storage, and supports web browsing an
 - [x] [BaiduNetdisk](https://pan.baidu.com/) / [share](./drivers/baidu_share.md)
 - [x] [Quark/TV](https://pan.quark.cn/)
 - [x] [Thunder / X Browser](../guide/drivers/thunder.md)
+- [x] [GuangYaPan](../guide/drivers/guangyapan.md)
 - [x] [Lanzou](https://www.lanzou.com/)、[NewLanzou](https://www.ilanzou.com)
 - [x] [Feiji Cloud](https://www.feijipan.com/)
 - [x] [Aliyundrive share](https://www.alipan.com/)
