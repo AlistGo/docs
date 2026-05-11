@@ -51,7 +51,7 @@ Thunder Browser：Currently only supports mobile phones (Android, iOS)
 
 That is, the mobile phone number, email, and username used for login (there is a probability that you cannot log in, you need to try)
 
-- You need to bring the `+86` area code, for example +86 13722223333 fill in like this
+- For phone numbers, try the 11-digit number first. If login fails, try adding the `+86` area code, for example `+86 13722223333`.
 
 <br/>
 
@@ -65,19 +65,65 @@ password for login
 
 
 
-### **CaptchaToken**
+### **CaptchaToken / CreditKey / DeviceID**
 
-Need verify: {url} may appear when logging in or uploading, please visit the link in the error to complete the verification and get CaptchaToken (verification code)
+`CaptchaToken` usually does not need to be filled manually. If `need verify: {url}` appears when logging in or uploading, open the link in the error and complete the verification. The driver will save the new `CaptchaToken` automatically.
 
-![xunlei](/img/drivers/xunlei/x1.png)
+`DeviceID` can usually be left empty. The driver will generate and save one automatically. If login verification is triggered, keep the same `DeviceID` before retrying; changing it frequently may make the verification result unusable.
 
-Fill in the mount directory ID account password and save it, there will be a big lump in the upper right corner (cannot be copied),
+`CreditKey` is only used when login verification is triggered. If the following prompt appears when adding the driver, login verification has been triggered:
 
-Let's go back to adding an account to copy from Https to the end to a new window to get the verification code parameter (CaptchaToken)
+![xunlei-login-review-error-1](/img/drivers/xunlei/pr8342/login-review-error-1.png)
 
-See the image below to add
+![xunlei-login-review-error-2](/img/drivers/xunlei/pr8342/login-review-error-2.png)
 
-![xunlei](/img/drivers/xunlei/x2.png)
+### **Login verification solution**
+
+Use a computer if possible.
+
+Copy the complete data in the box, from the first `{` to the last `}`, for example:
+
+```json
+{
+  "creditkey": "",
+  "reviewurl": "",
+  "deviceid": "",
+  "devicesign": ""
+}
+```
+
+Open this site:
+
+`https://i.xunlei.com/xlcaptcha/android.html`
+
+![xunlei-captcha-page-initial](/img/drivers/xunlei/pr8342/captcha-page-initial.png)
+
+The image above shows the initial page. This captcha is unrelated to the verification required by the mount.
+
+Open the browser console (F12), enter `reviewCb(the copied data as the parameter)`, and press Enter. Example:
+
+```js
+reviewCb({
+  "creditkey": "",
+  "reviewurl": "",
+  "deviceid": "",
+  "devicesign": ""
+})
+```
+
+Then the page will change to SMS verification or smart detection:
+
+![xunlei-reviewcb-console](/img/drivers/xunlei/pr8342/reviewcb-console.png)
+
+![xunlei-sms-review](/img/drivers/xunlei/pr8342/sms-review.png)
+
+![xunlei-smart-review](/img/drivers/xunlei/pr8342/smart-review.png)
+
+Complete the SMS verification. The smart detection page does not need to be completed. It will not redirect back to AList, and clicking the confirm button may not show any prompt.
+
+Copy `creditkey` from the console, fill it into the driver's `CreditKey` field, then save the driver configuration.
+
+![xunlei-creditkey-field](/img/drivers/xunlei/pr8342/creditkey-field.png)
 
 <br/>
 
@@ -113,7 +159,7 @@ Or use the proxy function in this program to transfer.
 ### **Login Type**
 
 1. When selecting User, you only need to fill in the username and password
-   - User You need to bring the `+86` area code, for example +86 13722223333 fill in like this
+   - For phone numbers, try the 11-digit number first. If login fails, try adding the `+86` area code, for example `+86 13722223333`.
 
 
 2. **RefreshToken**: Just fill in RefreshToken when selecting RefreshToken
@@ -124,7 +170,7 @@ Or use the proxy function in this program to transfer.
 
 ### **Signature Type**
 
-**Algorithms**：When selecting Algorithms, just fill in the Algorithms (it is difficult to obtain, and needs to be reversed)
+**Algorithms**: When selecting Algorithms, fill in Algorithms. The default value has been updated to the parameters built into the current driver, so normally keep the default.
 
 **Captcha sign**: Only fill in CaptchaSign and Timestamp when selecting CaptchaSign
 
@@ -147,20 +193,32 @@ Login type and Sign type recommended options
 
 ### **DeviceID**
 
-The value calculated by md5 is used to determine the logged in device
+Used to identify the login device. If left empty, the driver will generate and save one automatically. If login verification is triggered, keep the same `DeviceID` and retry.
 
 ### **ClientID, ClientSecret, ClientVersion, PackageName**
 
-It is related to the signature, fill in according to the actual situation
+These values are related to signing and login. The defaults have been updated to:
+
+- `ClientID`: `Xp6vsxz_7IYVw2BB`
+- `ClientSecret`: `Xp6vsy4tN9toTVdMSpomVdXpRmES`
+- `ClientVersion`: `8.31.0.9726`
+- `PackageName`: `com.xunlei.downloadprovider`
+
+Normally keep the defaults.
 
 ### **UserAgent**
 
-UserAgent used by API requests, may be inaccessible or speed limited if the setting is incorrect
+UserAgent used by API requests. Incorrect values may cause access failure or speed limits. The default has been updated to `ANDROID-com.xunlei.downloadprovider/8.31.0.9726 ... sdkVersion/512000 ...`.
 
 ### **DownUserAgent**
 
-The User Agent used for downloading, if the setting is wrong, it will not be downloaded (it will be used when the agent is turned on) Fixed parameters:
-**Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36**
+The User Agent used for downloading. Incorrect values may cause download failures or abnormal speed (used when proxy is enabled). Default:
+
+`Dalvik/2.1.0 (Linux; U; Android 12; M2004J7AC Build/SP1A.210812.016)`
+
+### **CreditKey**
+
+Only used when login verification is triggered. Use the same handling steps as [CaptchaToken / CreditKey / DeviceID](#captchatoken--creditkey--deviceid). After a successful login, the driver clears this field.
 
 <br/>
 
@@ -168,32 +226,15 @@ The User Agent used for downloading, if the setting is wrong, it will not be dow
 
 ## **Key data acquisition process**
 
-Obtain Xunlei request data through network analysis tools (packet capture tools) --- Please read the following information carefully
+After PR [#8342](https://github.com/AlistGo/alist/pull/8342), username/password login for `Thunder` and `ThunderExpert` was changed:
 
-Open Xunlei and log in to your account (the picture below uses the PC client to operate, and the web terminal is also available)
+1. The driver first calls `https://xluser-ssl.xunlei.com/xluser.core.login/v3/login` to get `sessionID`.
+2. It then calls `https://xluser-ssl.xunlei.com/v1/auth/signin/token` to exchange the token used by AList.
+3. Login parameters were updated to Xunlei Android client `8.31.0.9726` and `sdkVersion/512000`.
+4. A `CreditKey` field was added for login verification.
+5. The normal `Thunder` driver can also customize `DeviceID`.
 
-Included in the request https://xluser-ssl.xunlei.com/v1/shield/captcha/init
-CaptchaSign, Timestamp, DeviceID, ClientID, ClientVersion, PackageName, User-Agent
-
-**Note**: After obtaining the information of the two pictures, slowly select the data from the two data captured and fill in it
-
-After logging in to Thunder and opening the packet capture tool, it is possible that the information of **v1/shield/captcha/init** cannot be immediately obtained at this time.
-
-Do not close the Xunlei PC client and the packet capture tool, just wait, it will refresh automatically after **5 minutes**
-
-You will see the parameters as shown in the figure below, and you can fill in it according to the acquisition (if you can't see it clearly, you can right-click to copy the picture and link it to the browser to open a new window)
-
-See **v1/shield/captcha/init** and grab it, please **immediately don't delay for a second** Right-click Xunlei in the taskbar in the lower right corner to exit, exit completely and then reopen to get * *Figure II**
-
-![xunlei](/img/drivers/xunlei/x4.png)
-
-Restarting Thunder will refresh the token
-
-The request to https://xluser-ssl.xunlei.com/v1/auth/token contains RefreshToken (please use the returned value), ClientSecret (does not exist on the web side)
-
-![xunlei](/img/drivers/xunlei/x5.png)
-
-Figure 1 contains **7** parameters | Figure 1 contains **2** parameters | a fixed parameter (Down UserAgent), ten parameters and 3 options and a mount path, just write and save, before saving Remember to check~
+Therefore, the old process of capturing `v1/shield/captcha/init` and `v1/auth/token` to obtain `CaptchaSign`, `Timestamp`, `RefreshToken`, and related fields is outdated. Prefer the normal `Thunder` driver and only fill in username and password. Use `ThunderExpert` only when advanced parameters or custom UserAgent are needed.
 
 <br/>
 

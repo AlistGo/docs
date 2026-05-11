@@ -54,8 +54,7 @@ star: true
 
 即用于登陆的手机号,邮箱,用户名(有概率无法登录,需要尝试)
 
-1. 在获取验证码之前填写手机号先不要携带 `+86` 区号
-2. 获取验证码后填写需要携带 `+86` 区号，例如 +86 13722223333 这样填写
+- 手机号可先直接填写 11 位手机号；如果登录失败，再尝试携带 `+86` 区号，例如 `+86 13722223333`
 
 <br/>
 
@@ -69,19 +68,65 @@ star: true
 
 
 
-### **CaptchaToken**
+### **CaptchaToken / 信任密钥 / 设备ID**
 
-在登录或上传是可能出现 need verify: {url},请访问错误中的链接完成验证得到 CaptchaToken（验证码）
+`CaptchaToken` 一般不需要手动填写。登录或上传时如果出现 `need verify: {url}`，请打开错误中的链接完成验证，驱动会自动保存新的 `CaptchaToken`。
 
-![xunlei](/img/drivers/xunlei/x1.png)
+`设备ID` 默认留空即可，驱动会自动生成并保存。触发登录验证后，不要频繁更换 `设备ID`，否则可能导致验证结果无法复用。
 
-填写好挂载目录 ID 账号 密码后保存，右上角会出现一大坨(没法复制)，
+`信任密钥（CreditKey）` 只在触发登录验证时使用。保存驱动时如果出现下图所示的情况，就是触发了登录验证：
 
-我们回到添加账号这里来复制 从 Https 开始复制到结束到一个新窗口进行获取验证码参数(CaptchaToken)
+![xunlei-login-review-error-1](/img/drivers/xunlei/pr8342/login-review-error-1.png)
 
-看下图添加
+![xunlei-login-review-error-2](/img/drivers/xunlei/pr8342/login-review-error-2.png)
 
-![xunlei](/img/drivers/xunlei/x2.png)
+### **登录验证的解决办法**
+
+尽量使用电脑操作。
+
+完整复制方框中的数据，从第一个 `{` 开始到最后一个 `}` 结束，例如：
+
+```json
+{
+  "creditkey": "",
+  "reviewurl": "",
+  "deviceid": "",
+  "devicesign": ""
+}
+```
+
+打开下面的网站：
+
+`https://i.xunlei.com/xlcaptcha/android.html`
+
+![xunlei-captcha-page-initial](/img/drivers/xunlei/pr8342/captcha-page-initial.png)
+
+上图是刚打开的样子，注意这个验证码与挂载所需的验证无关。
+
+打开浏览器控制台（F12），输入 `reviewCb(中间的参数为之前复制的数据)` 后回车，例如：
+
+```js
+reviewCb({
+  "creditkey": "",
+  "reviewurl": "",
+  "deviceid": "",
+  "devicesign": ""
+})
+```
+
+即可看到页面变成短信验证或智能检测：
+
+![xunlei-reviewcb-console](/img/drivers/xunlei/pr8342/reviewcb-console.png)
+
+![xunlei-sms-review](/img/drivers/xunlei/pr8342/sms-review.png)
+
+![xunlei-smart-review](/img/drivers/xunlei/pr8342/smart-review.png)
+
+完成短信验证，智能检测页面无需完成。这里不会跳转回 AList，且点击确定按钮后可能没有任何提示。
+
+复制控制台中的 `creditkey`，并将其填回驱动配置的 `信任密钥（CreditKey）` 字段中，然后保存驱动配置。
+
+![xunlei-creditkey-field](/img/drivers/xunlei/pr8342/creditkey-field.png)
 
 <br/>
 
@@ -117,7 +162,7 @@ flowchart TB
 ### **登录类型**
 
 1. 选择 `用户名` 时填用户名和密码
-   - 用户名需要携带 `+86` 区号，例如 +86 13722223333 这样填写
+   - 手机号可先直接填写 11 位手机号；如果登录失败，再尝试携带 `+86` 区号，例如 `+86 13722223333`
 
 
 2. 选择 `刷新令牌`时只需填写 `刷新令牌`
@@ -128,7 +173,7 @@ flowchart TB
 
 ### **签名类型**
 
-选择 `算法` 时需填写 `算法`(比较难获取,需要逆向)
+选择 `算法` 时填写 `算法`，默认值已更新为当前驱动内置参数，一般保持默认即可
 
 选择 `验证码签名` 时只需填写 `验证码签名` 和 `时间戳`
 
@@ -151,21 +196,32 @@ CaptchaSign = "1." + str
 
 ### **设备ID**
 
-通过 MD5 计算的值，用于判断登录的设备
+用于判断登录设备。留空时驱动会自动生成并保存；如果触发登录验证，建议保持同一个 `设备ID` 后再重试。
 
 ### **客户端ID, 客户端秘钥, 客户端版本, 包名**
 
-与签名有关，根据实际情况填写
+与签名和登录有关。默认值已更新为：
+
+- `客户端ID`：`Xp6vsxz_7IYVw2BB`
+- `客户端秘钥`：`Xp6vsy4tN9toTVdMSpomVdXpRmES`
+- `客户端版本`：`8.31.0.9726`
+- `包名`：`com.xunlei.downloadprovider`
+
+一般保持默认即可。
 
 ### **用户代理**
 
-API 请求使用的 UserAgent，设置错误可能无法访问或限速
+API 请求使用的 UserAgent，设置错误可能无法访问或限速。默认值已更新到 `ANDROID-com.xunlei.downloadprovider/8.31.0.9726 ... sdkVersion/512000 ...`。
 
 ### **下载用户代理**
 
-下载时用到的 User Agent，如果设置错误会无法下载(开启代理会使用) 固定参数：
+下载时用到的 User Agent，如果设置错误可能无法下载或速度异常（开启代理会使用）。默认值：
 
-`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36`
+`Dalvik/2.1.0 (Linux; U; Android 12; M2004J7AC Build/SP1A.210812.016)`
+
+### **信任密钥**
+
+仅在触发登录验证时使用，处理方法同上方 [CaptchaToken / 信任密钥 / 设备ID](#captchatoken--信任密钥--设备id)。登录成功后驱动会清空该字段。
 
 <br/>
 
@@ -173,32 +229,15 @@ API 请求使用的 UserAgent，设置错误可能无法访问或限速
 
 ## **关键数据获取流程**
 
-通过网络分析工具(抓包工具)获取迅雷请求数据
+PR [#8342](https://github.com/AlistGo/alist/pull/8342) 后，`迅雷` 和 `迅雷专家版` 的账号密码登录流程已调整：
 
-打开迅雷并登录账号（下图使用的是 PC 客户端来操作的，Web 端也可以）
+1. 先调用 `https://xluser-ssl.xunlei.com/xluser.core.login/v3/login` 获取 `sessionID`。
+2. 再调用 `https://xluser-ssl.xunlei.com/v1/auth/signin/token` 换取 AList 使用的登录令牌。
+3. 登录参数更新到迅雷 Android 客户端 `8.31.0.9726`、`sdkVersion/512000`。
+4. 新增 `信任密钥（CreditKey）` 字段，用于处理登录验证。
+5. `迅雷` 普通版也支持自定义 `设备ID`。
 
-请求 https://xluser-ssl.xunlei.com/v1/shield/captcha/init 中包含
-CaptchaSign、Timestamp、DeviceID、ClientID、ClientVersion、PackageName、User-Agent
-
-注：获取好两张图信息后再慢慢的从抓到的两条数据内挑选数据填进去
-
-登录迅雷 打开抓包工具后，这时候可能，不能立马获取到 `v1/shield/captcha/init` 的信息，
-
-迅雷 PC 客户端 和抓包工具不要关闭，等待即可，**5 分钟左右** 就会自动刷新
-
-就会看到如下图的参数 照着获取填写即可(看不清的话可以右键复制图片链接到浏览器新开个窗口打开)
-
-看到 `v1/shield/captcha/init` 抓取到后 请**立刻马上不要耽误一秒钟** 把迅雷在右下角任务栏的迅雷右键点击退出，彻底退出 然后重新打开 获取到**图二**
-
-![xunlei](/img/drivers/xunlei/x4.png)
-
-重启迅雷会刷新 token
-
-请求 https://xluser-ssl.xunlei.com/v1/auth/token 中包含 RefreshToken（请使用返回的值）、ClientSecret（web 端不存在）
-
-![xunlei](/img/drivers/xunlei/x5.png)
-
-图一包含 **7 条** 参数 | 图一包含 **2 条** 参数 | 一条固定参数(Down UserAgent) ，十条参数 和 3 个选项 以及一个挂载路径，写好保存即可，保存前记得检查喔~~
+因此，旧文档中通过抓包 `v1/shield/captcha/init`、`v1/auth/token` 来获取 `CaptchaSign`、`Timestamp`、`RefreshToken` 等参数的流程已经过期。普通用户优先使用 `迅雷` 驱动，只填写用户名和密码；需要高级参数或自定义 UserAgent 时再使用 `迅雷专家版`。
 
 <br/>
 
