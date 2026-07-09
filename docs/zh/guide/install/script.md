@@ -57,7 +57,7 @@ curl -fsSL "https://alistgo.com/beta.sh" | bash -s uninstall
 @tab Windows版
 **安装**
 ```bash
-iwr -useb "https://alistgo.com/alist-manager.ps1" | iex
+iex ([System.Text.Encoding]::UTF8.GetString((iwr -useb "https://alistgo.com/alist-manager.ps1").Content))
 ```
 ![alist-windows-install](/img/guide/alist-windows-install.png)
 
