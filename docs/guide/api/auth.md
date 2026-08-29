@@ -35,8 +35,8 @@ POST /api/auth/login
 
 ```json
 {
-  "username": "{{alist_username}}",
-  "password": "{{alist_password}}"
+  "Username": "{{alist_username}}",
+  "Password": "{{alist_password}}"
 }
 ```
 
@@ -47,8 +47,8 @@ POST /api/auth/login
 | Client-Id  | header | string | 否   | 设备标识 | 推荐传入稳定值，用于保持同一设备会话 |
 | client_id  | query | string | 否   | 设备标识 | `Client-Id` 的查询参数形式 |
 | body       | body | object | 否   |            | none       |
-| » username | body | string | 是   | 用户名     | 用户名     |
-| » password | body | string | 是   | 密码       | 密码       |
+| » Username | body | string | 是   | 用户名     | 用户名     |
+| » Password | body | string | 是   | 密码       | 密码       |
 | » otp_code | body | string | 否   | 二步验证码 | 二步验证码 |
 
 > If you want a custom API client to keep a stable device session, send the same `Client-Id` on login and subsequent authenticated requests. The web UI does this automatically.
