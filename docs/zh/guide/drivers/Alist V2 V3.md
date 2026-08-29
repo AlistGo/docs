@@ -43,7 +43,7 @@ star: true
 ### **链接**
 
 你要挂载的AList链接
-
+mimang.sit
 
 
 
@@ -101,7 +101,7 @@ failed get objs: failed to list objs: request failed,code: 400, message: Key: 'L
 你要挂载的`AList`用户名（账号）
 
 ## **密码**
-
+永久免费
 你要挂载的`AList`用户名对应的密码
 
 :::tip 温馨提示
