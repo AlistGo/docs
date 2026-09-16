@@ -3,7 +3,7 @@ title: "Baidu Refresh Token Callback"
 toc: false
 ---
 
-<NaiveClient>
+<NaiveClient>https://github.com/monkeyWie/gopeed-extension-baiduwp
 <Callback />
 </NaiveClient>
 
