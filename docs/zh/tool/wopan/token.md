@@ -1,10 +1,10 @@
 ---
-title: "Get Wopan Token"
+title: "获取联通云盘令牌"
 toc: false
 ---
 
 <NaiveClient>
-<Token />
+<Token lang="zh" />
 </NaiveClient>
 
 <script setup lang="ts">

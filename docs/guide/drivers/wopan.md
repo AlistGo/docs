@@ -36,14 +36,16 @@ Get the token tool address：**https://alistgo.com/tool/wopan/token.html**
 
 - ![](/img/drivers/wopan/wopan-tool.png)
 
-==This tool may have a graphic verification code due to too many users. If a graphic verification code appears, you need to manually capture the packet:==
-- Open developer tools
-- Open the official website https://pan.wo.cn/ to log in
-- Find the request with this content:
-   ![](/img/drivers/wopan/wopan-req.png)
-- Find the token in the response:
-   ![](/img/drivers/wopan/wopan-resp.png)
+The tool supports password, SMS code, and APP QR login.
 
+- Password: verify your password, then enter the SMS code. If prompted, send an SMS code first.
+- SMS code: enter your phone number, send an SMS code, and enter it to obtain a token.
+- APP QR code: generate a code, scan it with the scanner in the WoPan APP's My page, and confirm on your phone. Generate a new code when it expires.
+- If an image verification code is required, enter it in the tool. An incorrect code refreshes the image.
+
+Copy the returned `access_token` and, when available, `refresh_token` into the matching settings. QR login may not return a refresh token; the tool indicates when it is absent. Tokens are displayed only on the current page and are not written to browser local storage.
+
+WoPan tokens must be obtained through the tool above. Capturing login requests from the official website yourself is not supported. If the tool is temporarily unavailable, please try again later.
 
 ## **Root folder ID**
 
