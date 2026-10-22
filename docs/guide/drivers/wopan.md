@@ -45,11 +45,7 @@ The tool supports password, SMS code, and APP QR login.
 
 Copy the returned `access_token` and, when available, `refresh_token` into the matching settings. QR login may not return a refresh token; the tool indicates when it is absent. Tokens are displayed only on the current page and are not written to browser local storage.
 
-If the tool is unavailable, log in at https://pan.wo.cn/ and inspect the login response in your browser's developer tools:
-
-- Login request example: ![](/img/drivers/wopan/wopan-req.png)
-- Login response example: ![](/img/drivers/wopan/wopan-resp.png)
-
+WoPan tokens must be obtained through the tool above. Capturing login requests from the official website yourself is not supported. If the tool is temporarily unavailable, please try again later.
 
 ## **Root folder ID**
 
